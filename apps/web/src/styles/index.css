@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root { height: 100%; }
+  ::selection { background: #F5A62333; }
+  * { scrollbar-width: thin; scrollbar-color: #334261 #0B1220; }
+  :focus-visible { outline: 2px solid #F5A623; outline-offset: 2px; }
+}
+
+@layer components {
+  .panel {
+    @apply bg-base-800 border border-base-600 rounded-lg shadow-panel;
+  }
+  .beacon {
+    @apply inline-block w-2.5 h-2.5 rounded-full;
+  }
+  .beacon-green { @apply bg-signal-green shadow-[0_0_8px_rgba(45,212,167,0.8)]; }
+  .beacon-yellow { @apply bg-signal-yellow shadow-[0_0_8px_rgba(245,166,35,0.8)]; }
+  .beacon-red { @apply bg-signal-red shadow-[0_0_8px_rgba(239,75,75,0.8)]; }
+  .beacon-grey { @apply bg-signal-grey; }
+
+  .btn-primary {
+    @apply bg-amber-400 hover:bg-amber-500 text-base-950 font-semibold px-4 py-2 rounded-md transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-base-700 hover:bg-base-600 text-ink-100 font-medium px-4 py-2 rounded-md transition-colors text-sm border border-base-600 disabled:opacity-40;
+  }
+  .input {
+    @apply bg-base-900 border border-base-600 rounded-md px-3 py-2 text-sm text-ink-100 placeholder:text-ink-500 focus:border-amber-400 outline-none w-full;
+  }
+  .label {
+    @apply text-xs uppercase tracking-wide text-ink-500 font-medium mb-1 block;
+  }
+  .data-value {
+    @apply font-data tabular-nums;
+  }
+  .table-shell {
+    @apply w-full text-sm border-collapse;
+  }
+  .table-shell th {
+    @apply text-left text-xs uppercase tracking-wide text-ink-500 font-medium px-3 py-2 border-b border-base-600;
+  }
+  .table-shell td {
+    @apply px-3 py-2 border-b border-base-700/60 text-ink-100;
+  }
+  .table-shell tr:hover td {
+    @apply bg-base-700/40;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium;
+  }
+}

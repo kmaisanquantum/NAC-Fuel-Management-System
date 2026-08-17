@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: nac-fms-api
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      JWT_SECRET: ${JWT_SECRET:-change-me-to-a-long-random-string-in-production}
+      DB_PATH: /app/data/nac_fms.db
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8080}
+      MAX_ALLOWED_VARIANCE_PCT: ${MAX_ALLOWED_VARIANCE_PCT:-0.5}
+    volumes:
+      - api-data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:4000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # One-off demo data loader. Run explicitly: `docker compose run --rm seed`
+  seed:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: nac-fms-seed
+    profiles: ["tools"]
+    environment:
+      DB_PATH: /app/data/nac_fms.db
+    volumes:
+      - api-data:/app/data
+    entrypoint: ["node", "dist/seed/seed.js"]
+    depends_on:
+      - api
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+    container_name: nac-fms-web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  api-data:
