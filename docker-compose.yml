@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile
     container_name: nac-fms-api
     restart: unless-stopped
-    expose:
-      - "4000"
+    ports:
+      - "4000:4000"
     environment:
       NODE_ENV: production
       PORT: 4000
@@ -22,30 +22,16 @@ services:
       timeout: 5s
       retries: 3
 
-  # One-off demo data loader. Run explicitly: `docker compose run --rm seed`
-seed:
+  web:
     build:
-      context: ./apps/api
+      context: ./apps/web
       dockerfile: Dockerfile
-    container_name: nac-fms-seed
-    environment:
-      DB_PATH: /app/data/nac_fms.db
-    volumes:
-      - api-data:/app/data
-    entrypoint: ["node", "dist/seed/seed.js"]
+    container_name: nac-fms-web
+    restart: unless-stopped
+    ports:
+      - "80:80"
     depends_on:
       - api
- ports:
-  - "80"
-  build:
-    context: ./apps/web
-    dockerfile: Dockerfile
-  container_name: nac-fms-web
-  restart: unless-stopped
-  ports:
-    - "80"
-  depends_on:
-    - api
 
 volumes:
   api-data:
