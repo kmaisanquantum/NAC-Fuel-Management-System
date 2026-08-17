@@ -30,8 +30,6 @@ services:
     restart: unless-stopped
     ports:
       - "80"
-    environment:
-      - SERVICE_FQDN_WEB_80=${SERVICE_FQDN_WEB_80:-}
     depends_on:
       - api
 
