@@ -37,16 +37,16 @@ services:
     depends_on:
       - api
 
-  web:
-    build:
-      context: ./apps/web
-      dockerfile: Dockerfile
-    container_name: nac-fms-web
-    restart: unless-stopped
-    expose:
-      - "80"
-    depends_on:
-      - api
+ web:
+  build:
+    context: ./apps/web
+    dockerfile: Dockerfile
+  container_name: nac-fms-web
+  restart: unless-stopped
+  ports:
+    - "80"
+  depends_on:
+    - api
 
 volumes:
   api-data:
