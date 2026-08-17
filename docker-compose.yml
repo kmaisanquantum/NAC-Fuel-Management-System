@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile
     container_name: nac-fms-api
     restart: unless-stopped
-    ports:
-      - "4000:4000"
+    expose:
+      - "4000"
     environment:
       NODE_ENV: production
       PORT: 4000
@@ -29,7 +29,7 @@ services:
     container_name: nac-fms-web
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "80"
     depends_on:
       - api
 
