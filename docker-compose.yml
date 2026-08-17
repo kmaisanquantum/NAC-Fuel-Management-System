@@ -23,19 +23,18 @@ services:
       retries: 3
 
   # One-off demo data loader. Run explicitly: `docker compose run --rm seed`
-  seed:
+seed:
     build:
       context: ./apps/api
       dockerfile: Dockerfile
     container_name: nac-fms-seed
-      environment:
+    environment:
       DB_PATH: /app/data/nac_fms.db
     volumes:
       - api-data:/app/data
     entrypoint: ["node", "dist/seed/seed.js"]
     depends_on:
       - api
-
  ports:
   - "80"
   build:
