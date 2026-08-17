@@ -28,8 +28,7 @@ services:
       context: ./apps/api
       dockerfile: Dockerfile
     container_name: nac-fms-seed
-    profiles: ["tools"]
-    environment:
+      environment:
       DB_PATH: /app/data/nac_fms.db
     volumes:
       - api-data:/app/data
@@ -37,7 +36,8 @@ services:
     depends_on:
       - api
 
- web:
+ ports:
+  - "80"
   build:
     context: ./apps/web
     dockerfile: Dockerfile
