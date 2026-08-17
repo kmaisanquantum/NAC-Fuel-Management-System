@@ -17,6 +17,22 @@ docker compose run --rm seed   # load demo data (DEMO / NOT REAL NAC DATA)
 - API: http://localhost:4000 (proxied through the web container at `/api` too)
 - API data persists in the `api-data` named volume (SQLite file)
 
+## Deploying on Coolify
+
+Coolify is a self-hosted PaaS that uses Traefik as a reverse proxy to route domain traffic to containerized applications.
+
+1. **Create Resource**: In Coolify, create a new **Docker Compose** resource pointing to this repository and branch (`main`).
+2. **Domain Configuration**: Configure your public domain (e.g., `https://nac-fms.example.com`) on the `web` service in the Coolify interface, pointing to internal port `80`.
+3. **Environment Variables**: In the Coolify environment variable settings, set:
+   - `JWT_SECRET`: A long, secure random string.
+   - `CORS_ORIGIN`: Your public frontend domain (e.g., `https://nac-fms.example.com`).
+   - `MAX_ALLOWED_VARIANCE_PCT`: `0.5` (or as required).
+4. **Persistent Volume**: Ensure the named volume `api-data` is retained so the SQLite database (`/app/data/nac_fms.db`) persists across redeployments.
+5. **Database Seeding**: After the initial deployment, run the one-off seed job using the `tools` profile to populate demo data via the Coolify terminal/exec interface or command line:
+   ```bash
+   docker compose --profile tools run --rm seed
+   ```
+
 ## Target production topology
 
 ```mermaid
