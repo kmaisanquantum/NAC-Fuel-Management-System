@@ -8,6 +8,7 @@ import path from "path";
 import fs from "fs";
 
 import { initSchema } from "./db";
+import { ensureBootstrapAccounts } from "./db/bootstrap";
 import { errorHandler, notFound } from "./middleware/errorHandler";
 
 import authRoutes from "./routes/auth";
@@ -34,6 +35,7 @@ import reportRoutes from "./routes/reports";
 import userRoutes from "./routes/users";
 
 initSchema();
+ensureBootstrapAccounts();
 
 const app = express();
 
