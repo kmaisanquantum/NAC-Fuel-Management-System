@@ -33,9 +33,7 @@ export default function Login() {
 
       <div className="relative w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="mx-auto mb-4 w-14 h-14 rounded-full border-2 border-amber-400 flex items-center justify-center">
-            <span className="beacon beacon-green" />
-          </div>
+          <img src="/nac-logo.png" alt="National Airports Corporation" className="mx-auto mb-4 h-20 w-auto" />
           <h1 className="font-display text-xl font-semibold text-ink-100">NAC Fuel Management System</h1>
           <p className="text-xs text-ink-500 mt-1 uppercase tracking-widest">National Airports Corporation · Papua New Guinea</p>
         </div>

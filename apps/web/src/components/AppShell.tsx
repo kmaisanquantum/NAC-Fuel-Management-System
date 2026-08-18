@@ -61,7 +61,8 @@ export default function AppShell() {
     <div className="min-h-screen flex flex-col lg:flex-row bg-base-950">
       {/* Mobile Top Bar */}
       <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-base-900 border-b border-base-700 shrink-0 sticky top-0 z-20">
-        <div>
+        <div className="flex items-center gap-3">
+          <img src="/nac-mark.png" alt="National Airports Corporation" className="h-8 w-auto" />
           <div className="font-display font-semibold text-base leading-tight text-ink-100">
             NAC Fuel <span className="text-amber-400">Management System</span>
           </div>
@@ -98,6 +99,7 @@ export default function AppShell() {
       >
         <div className="px-5 py-5 border-b border-base-700 flex items-center justify-between">
           <div>
+            <img src="/nac-logo.png" alt="National Airports Corporation" className="h-10 w-auto mb-2" />
             <div className="font-display font-semibold text-lg leading-tight text-ink-100">NAC Fuel</div>
             <div className="font-display font-semibold text-lg leading-tight text-amber-400">Management System</div>
             <div className="text-[10px] uppercase tracking-widest text-ink-500 mt-1">National Airports Corporation · PNG</div>
