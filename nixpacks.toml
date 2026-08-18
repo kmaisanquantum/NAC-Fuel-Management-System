@@ -1,0 +1,22 @@
+providers = ["node"]
+
+[variables]
+NIXPACKS_NODE_VERSION = "22"
+
+[phases.setup]
+nixPkgs = ["nodejs_22", "python3", "gcc", "gnumake"]
+
+[phases.install]
+cmds = ["npm install"]
+
+[phases.build]
+cmds = [
+  "npm --prefix apps/web run build",
+  "npm --prefix apps/api run build",
+  "mkdir -p apps/api/dist/public apps/api/dist/db",
+  "cp -r apps/web/dist/* apps/api/dist/public/",
+  "cp apps/api/src/db/schema.sql apps/api/dist/db/schema.sql"
+]
+
+[start]
+cmd = "node apps/api/dist/index.js"
