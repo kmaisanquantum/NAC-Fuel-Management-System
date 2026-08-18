@@ -14,25 +14,6 @@ db.pragma("journal_mode = WAL");
 db.pragma("foreign_keys = ON");
 
 export function initSchema() {
-  const candidatePaths = [
-    path.join(__dirname, "schema.sql"),
-    path.join(__dirname, "../src/db/schema.sql"),
-    path.join(__dirname, "../../src/db/schema.sql"),
-    path.join(process.cwd(), "apps/api/src/db/schema.sql")
-  ];
-
-  let schemaPath: string | undefined;
-  for (const candidate of candidatePaths) {
-    if (fs.existsSync(candidate)) {
-      schemaPath = candidate;
-      break;
-    }
-  }
-
-  if (!schemaPath) {
-    throw new Error(`Failed to locate schema.sql. Checked paths: ${candidatePaths.join(", ")}`);
-  }
-
-  const schema = fs.readFileSync(schemaPath, "utf-8");
+  const schema = fs.readFileSync(path.join(__dirname, "schema.sql"), "utf-8");
   db.exec(schema);
 }

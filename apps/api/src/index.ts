@@ -4,8 +4,6 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import rateLimit from "express-rate-limit";
-import path from "path";
-import fs from "fs";
 
 import { initSchema } from "./db";
 import { errorHandler, notFound } from "./middleware/errorHandler";
@@ -37,7 +35,7 @@ initSchema();
 
 const app = express();
 
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet());
 app.use(cors({ origin: process.env.CORS_ORIGIN?.split(",") || "*" }));
 app.use(express.json({ limit: "2mb" }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
@@ -71,14 +69,6 @@ app.use("/api/v1/audit-logs", auditRoutes);
 app.use("/api/v1/iot", iotRoutes);
 app.use("/api/v1/reports", reportRoutes);
 app.use("/api/v1/users", userRoutes);
-
-const webDir = process.env.WEB_DIR || path.join(__dirname, "public");
-if (fs.existsSync(webDir)) {
-  app.use(express.static(webDir));
-  app.get(/^\/(?!api|health).*/, (_req, res) => {
-    res.sendFile(path.join(webDir, "index.html"));
-  });
-}
 
 app.use(notFound);
 app.use(errorHandler);
