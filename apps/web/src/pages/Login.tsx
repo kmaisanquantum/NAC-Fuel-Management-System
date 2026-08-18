@@ -54,7 +54,7 @@ export default function Login() {
             {busy ? "Signing in…" : "Sign in"}
           </button>
           <div className="text-xs text-ink-500 pt-2 border-t border-base-600">
-            Demo accounts: <span className="font-data">admin@dspng.tech</span> or <span className="font-data">user@dspng.tech</span> / <span className="font-data">Admin@2026</span>
+            Demo accounts: <span className="font-data">admin@dspng.tech</span> or <span className="font-data">user@dspng.tech</span> / <span className="font-data">Admin@123!</span>
             <br />DEMO / NOT REAL NAC DATA
           </div>
         </form>

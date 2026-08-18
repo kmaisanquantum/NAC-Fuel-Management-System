@@ -73,7 +73,7 @@ for (const [code, name, region, lat, lng, conn] of AIRPORTS) {
 }
 
 // --- Users (one per role, at POM, plus airport managers for a few regional airports) ---
-const passwordHash = bcrypt.hashSync("Admin@2026", 10);
+const passwordHash = bcrypt.hashSync("Admin@123!", 10);
 function makeUser(email: string, fullName: string, role: string, airportCode?: string) {
   const id = uuid();
   db.prepare(`
@@ -340,4 +340,4 @@ for (const [code] of AIRPORTS.slice(0, 3)) {
 }
 
 console.log(`Seed complete: ${AIRPORTS.length} airports, ${tankIds.length} tanks, ${rIdx} refuellers, ${supplierIds.length} suppliers, ${airlineIds.length} airlines, ${aircraftIds.length} aircraft, ${qualityCount + 1} quality tests, ${maintCount} maintenance records, ${iotCount} IoT devices.`);
-console.log("Demo login: admin@dspng.tech / Admin@2026 or user@dspng.tech / Admin@2026");
+console.log("Demo login: admin@dspng.tech / Admin@123! or user@dspng.tech / Admin@123!");
