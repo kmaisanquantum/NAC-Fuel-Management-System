@@ -5,7 +5,7 @@ import { db } from "./index";
 export function ensureBootstrapAccounts() {
   const adminEmail = process.env.BOOTSTRAP_ADMIN_EMAIL || "admin@dspng.tech";
   const userEmail = process.env.BOOTSTRAP_USER_EMAIL || "user@dspng.tech";
-  const rawPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD || "Admin@123!";
+  const rawPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD || "Admin@2026";
 
   // Ensure default roles exist
   const rolesToEnsure = [
