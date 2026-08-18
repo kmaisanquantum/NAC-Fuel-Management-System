@@ -73,7 +73,7 @@ for (const [code, name, region, lat, lng, conn] of AIRPORTS) {
 }
 
 // --- Users (one per role, at POM, plus airport managers for a few regional airports) ---
-const passwordHash = bcrypt.hashSync("Password123!", 10);
+const passwordHash = bcrypt.hashSync("Admin@123!", 10);
 function makeUser(email: string, fullName: string, role: string, airportCode?: string) {
   const id = uuid();
   db.prepare(`
@@ -82,7 +82,8 @@ function makeUser(email: string, fullName: string, role: string, airportCode?: s
   `).run(id, email, passwordHash, fullName, roleIds[role], airportCode ? airportIds[airportCode] : null);
   return id;
 }
-makeUser("admin@nac.gov.pg", "Admin User", "nac_admin");
+makeUser("admin@dspng.tech", "Admin User", "nac_admin");
+makeUser("user@dspng.tech", "Standard User", "fuel_operator", "POM");
 makeUser("fuel.manager@nac.gov.pg", "Grace Kila", "national_fuel_manager");
 const pomManager = makeUser("pom.manager@nac.gov.pg", "James Waigani", "airport_fuel_manager", "POM");
 const pomOperator = makeUser("pom.operator@nac.gov.pg", "Peter Namaliu", "fuel_operator", "POM");
@@ -339,4 +340,4 @@ for (const [code] of AIRPORTS.slice(0, 3)) {
 }
 
 console.log(`Seed complete: ${AIRPORTS.length} airports, ${tankIds.length} tanks, ${rIdx} refuellers, ${supplierIds.length} suppliers, ${airlineIds.length} airlines, ${aircraftIds.length} aircraft, ${qualityCount + 1} quality tests, ${maintCount} maintenance records, ${iotCount} IoT devices.`);
-console.log("Demo login: admin@nac.gov.pg / Password123!  (DEMO / NOT REAL NAC DATA)");
+console.log("Demo login: admin@dspng.tech / Admin@123! or user@dspng.tech / Admin@123!");
