@@ -4,34 +4,6 @@ import { useAuth } from "../context/AuthContext";
 
 const NAV_GROUPS: { title: string; items: { to: string; label: string }[] }[] = [
   {
-    title: "Overview",
-    items: [
-      { to: "/national", label: "National Dashboard" },
-      { to: "/airport", label: "Airport Dashboard" },
-      { to: "/map", label: "Map View" },
-    ],
-  },
-  {
-    title: "Fuel Operations",
-    items: [
-      { to: "/receipts", label: "Fuel Receipts" },
-      { to: "/transfers", label: "Fuel Transfers" },
-      { to: "/uplifts", label: "Aircraft Uplift" },
-      { to: "/inventory", label: "Inventory" },
-      { to: "/reconciliation", label: "Reconciliation" },
-    ],
-  },
-  {
-    title: "Assets",
-    items: [
-      { to: "/tanks", label: "Tanks" },
-      { to: "/refuellers", label: "Refuellers" },
-      { to: "/maintenance", label: "Maintenance" },
-      { to: "/quality", label: "Fuel Quality" },
-      { to: "/iot", label: "IoT Devices" },
-    ],
-  },
-  {
     title: "Fleet Management",
     items: [
       { to: "/fleet", label: "Fleet Dashboard" },
@@ -45,17 +17,8 @@ const NAV_GROUPS: { title: string; items: { to: string; label: string }[] }[] = 
     ],
   },
   {
-    title: "Commercial",
-    items: [
-      { to: "/billing", label: "Billing & Invoices" },
-      { to: "/suppliers", label: "Suppliers" },
-      { to: "/airlines", label: "Airlines & Aircraft" },
-    ],
-  },
-  {
     title: "Administration",
     items: [
-      { to: "/airports", label: "Airports" },
       { to: "/alerts", label: "Alerts" },
       { to: "/audit", label: "Audit Logs" },
       { to: "/users", label: "Users & Roles" },
@@ -76,7 +39,7 @@ export default function AppShell() {
       <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-base-900 border-b border-base-700 shrink-0 sticky top-0 z-20">
         <div className="flex items-center gap-3">
           <div className="font-display font-semibold text-base leading-tight text-ink-100">
-            NAC Fuel <span className="text-amber-400">Management System</span>
+            Fuel <span className="text-amber-400">Management System</span>
           </div>
         </div>
         <button
@@ -111,9 +74,8 @@ export default function AppShell() {
       >
         <div className="px-5 py-5 border-b border-base-700 flex items-center justify-between">
           <div>
-            <div className="font-display font-semibold text-lg leading-tight text-ink-100">NAC Fuel</div>
+            <div className="font-display font-semibold text-lg leading-tight text-ink-100">Fuel</div>
             <div className="font-display font-semibold text-lg leading-tight text-amber-400">Management System</div>
-            <div className="text-[10px] uppercase tracking-widest text-ink-500 mt-1">National Airports Corporation · PNG</div>
           </div>
           <button
             type="button"
