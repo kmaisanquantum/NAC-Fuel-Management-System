@@ -33,8 +33,8 @@ export default function Login() {
 
       <div className="relative w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="font-display text-xl font-semibold text-ink-100">NAC Fuel Management System</h1>
-          <p className="text-xs text-ink-500 mt-1 uppercase tracking-widest">National Airports Corporation · Papua New Guinea</p>
+          <h1 className="font-display text-xl font-semibold text-ink-100">Fuel Management System</h1>
+          <p className="text-xs text-ink-500 mt-1 uppercase tracking-widest">Fleet & Vehicle Operations</p>
         </div>
 
         <form onSubmit={handleSubmit} className="panel p-6 space-y-4">
