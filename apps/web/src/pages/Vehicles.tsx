@@ -18,9 +18,9 @@ export default function Vehicles() {
   const [location, setLocation] = useState("Port Moresby (POM)");
 
   const fetchVehicles = () => {
-    api.get<Vehicle[]>("/vehicles")
-      .then((res) => setVehicles(res))
-      .catch(() => {})
+    api.get<{ data: Vehicle[] }>("/vehicles")
+      .then((res) => setVehicles(res.data || []))
+      .catch(() => setVehicles([]))
       .finally(() => setLoading(false));
   };
 
@@ -58,7 +58,7 @@ export default function Vehicles() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-display font-semibold text-ink-100">Vehicle Master Register</h1>
-          <p className="text-sm text-ink-400">Master record of all airport ground vehicles, pickups, and heavy fleet assets</p>
+          <p className="text-sm text-ink-400">Master record of all ground vehicles, pickups, and heavy fleet assets</p>
         </div>
         <button className="btn-primary" onClick={() => setShowModal(true)}>+ Register New Vehicle</button>
       </div>
@@ -78,7 +78,7 @@ export default function Vehicles() {
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
-            {vehicles.map((v) => (
+            {Array.isArray(vehicles) && vehicles.map((v) => (
               <tr key={v.id} className="hover:bg-base-800/50">
                 <td className="px-4 py-3 font-semibold text-amber-400">{v.vehicle_number}</td>
                 <td className="px-4 py-3 font-mono">{v.registration_number}</td>
@@ -98,7 +98,7 @@ export default function Vehicles() {
                 </td>
               </tr>
             ))}
-            {vehicles.length === 0 && (
+            {(!Array.isArray(vehicles) || vehicles.length === 0) && (
               <tr><td colSpan={8} className="px-4 py-6 text-center text-ink-500">No vehicles registered yet.</td></tr>
             )}
           </tbody>

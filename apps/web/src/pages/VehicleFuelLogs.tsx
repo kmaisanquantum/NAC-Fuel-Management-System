@@ -22,15 +22,15 @@ export default function VehicleFuelLogs() {
 
   const fetchData = () => {
     Promise.all([
-      api.get<VehicleFuelLog[]>("/vehicle-fuel-logs"),
-      api.get<Vehicle[]>("/vehicles"),
-      api.get<Driver[]>("/drivers"),
+      api.get<{ data: VehicleFuelLog[] }>("/vehicle-fuel-logs"),
+      api.get<{ data: Vehicle[] }>("/vehicles"),
+      api.get<{ data: Driver[] }>("/drivers"),
     ]).then(([logsRes, vehRes, drvRes]) => {
-      setLogs(logsRes);
-      setVehicles(vehRes);
-      setDrivers(drvRes);
-      if (vehRes.length > 0) setVehicleId(vehRes[0].id);
-      if (drvRes.length > 0) setDriverId(drvRes[0].id);
+      setLogs(logsRes.data || []);
+      setVehicles(vehRes.data || []);
+      setDrivers(drvRes.data || []);
+      if (vehRes.data && vehRes.data.length > 0) setVehicleId(vehRes.data[0].id);
+      if (drvRes.data && drvRes.data.length > 0) setDriverId(drvRes.data[0].id);
     }).catch(() => {})
       .finally(() => setLoading(false));
   };
@@ -89,7 +89,7 @@ export default function VehicleFuelLogs() {
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
-            {logs.map((l) => (
+            {Array.isArray(logs) && logs.map((l) => (
               <tr key={l.id} className="hover:bg-base-800/50">
                 <td className="px-4 py-3">{l.date}</td>
                 <td className="px-4 py-3 font-semibold text-amber-400">{l.vehicle_number}</td>
@@ -102,7 +102,7 @@ export default function VehicleFuelLogs() {
                 <td className="px-4 py-3 font-mono text-amber-400">{l.l_per_100km ? `${l.l_per_100km} L` : "—"}</td>
               </tr>
             ))}
-            {logs.length === 0 && (
+            {(!Array.isArray(logs) || logs.length === 0) && (
               <tr><td colSpan={9} className="px-4 py-6 text-center text-ink-500">No vehicle fuel logs recorded.</td></tr>
             )}
           </tbody>

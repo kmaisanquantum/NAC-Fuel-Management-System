@@ -17,12 +17,12 @@ export default function VehicleMaintenancePage() {
 
   const fetchData = () => {
     Promise.all([
-      api.get<VehicleMaintenance[]>("/vehicle-maintenance/maintenance"),
-      api.get<Vehicle[]>("/vehicles"),
+      api.get<{ data: VehicleMaintenance[] }>("/vehicle-maintenance/maintenance"),
+      api.get<{ data: Vehicle[] }>("/vehicles"),
     ]).then(([maintRes, vehRes]) => {
-      setMaintenanceRecords(maintRes);
-      setVehicles(vehRes);
-      if (vehRes.length > 0) setVehicleId(vehRes[0].id);
+      setMaintenanceRecords(maintRes.data || []);
+      setVehicles(vehRes.data || []);
+      if (vehRes.data && vehRes.data.length > 0) setVehicleId(vehRes.data[0].id);
     }).catch(() => {})
       .finally(() => setLoading(false));
   };
@@ -76,7 +76,7 @@ export default function VehicleMaintenancePage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
-            {maintenanceRecords.map((m) => (
+            {Array.isArray(maintenanceRecords) && maintenanceRecords.map((m) => (
               <tr key={m.id} className="hover:bg-base-800/50">
                 <td className="px-4 py-3 font-semibold text-amber-400">{m.vehicle_number}</td>
                 <td className="px-4 py-3">{m.maintenance_type.replace("_", " ")}</td>
@@ -91,7 +91,7 @@ export default function VehicleMaintenancePage() {
                 </td>
               </tr>
             ))}
-            {maintenanceRecords.length === 0 && (
+            {(!Array.isArray(maintenanceRecords) || maintenanceRecords.length === 0) && (
               <tr><td colSpan={7} className="px-4 py-6 text-center text-ink-500">No vehicle maintenance records logged.</td></tr>
             )}
           </tbody>

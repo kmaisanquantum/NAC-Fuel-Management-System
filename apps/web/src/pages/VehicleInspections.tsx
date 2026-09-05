@@ -16,12 +16,12 @@ export default function VehicleInspections() {
 
   const fetchData = () => {
     Promise.all([
-      api.get<VehicleInspection[]>("/vehicle-inspections"),
-      api.get<Vehicle[]>("/vehicles"),
+      api.get<{ data: VehicleInspection[] }>("/vehicle-inspections"),
+      api.get<{ data: Vehicle[] }>("/vehicles"),
     ]).then(([inspRes, vehRes]) => {
-      setInspections(inspRes);
-      setVehicles(vehRes);
-      if (vehRes.length > 0) setVehicleId(vehRes[0].id);
+      setInspections(inspRes.data || []);
+      setVehicles(vehRes.data || []);
+      if (vehRes.data && vehRes.data.length > 0) setVehicleId(vehRes.data[0].id);
     }).catch(() => {})
       .finally(() => setLoading(false));
   };
@@ -78,7 +78,7 @@ export default function VehicleInspections() {
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
-            {inspections.map((i) => (
+            {Array.isArray(inspections) && inspections.map((i) => (
               <tr key={i.id} className="hover:bg-base-800/50">
                 <td className="px-4 py-3">{i.inspection_date}</td>
                 <td className="px-4 py-3 font-semibold text-amber-400">{i.vehicle_number}</td>
@@ -95,7 +95,7 @@ export default function VehicleInspections() {
                 <td className="px-4 py-3 text-ink-400">{i.notes || "—"}</td>
               </tr>
             ))}
-            {inspections.length === 0 && (
+            {(!Array.isArray(inspections) || inspections.length === 0) && (
               <tr><td colSpan={5} className="px-4 py-6 text-center text-ink-500">No vehicle inspections recorded.</td></tr>
             )}
           </tbody>

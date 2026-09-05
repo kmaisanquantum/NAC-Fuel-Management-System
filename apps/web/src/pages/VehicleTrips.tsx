@@ -23,15 +23,15 @@ export default function VehicleTrips() {
 
   const fetchData = () => {
     Promise.all([
-      api.get<VehicleTrip[]>("/vehicle-trips"),
-      api.get<Vehicle[]>("/vehicles"),
-      api.get<Driver[]>("/drivers"),
+      api.get<{ data: VehicleTrip[] }>("/vehicle-trips"),
+      api.get<{ data: Vehicle[] }>("/vehicles"),
+      api.get<{ data: Driver[] }>("/drivers"),
     ]).then(([tripsRes, vehRes, drvRes]) => {
-      setTrips(tripsRes);
-      setVehicles(vehRes);
-      setDrivers(drvRes);
-      if (vehRes.length > 0) setVehicleId(vehRes[0].id);
-      if (drvRes.length > 0) setDriverId(drvRes[0].id);
+      setTrips(tripsRes.data || []);
+      setVehicles(vehRes.data || []);
+      setDrivers(drvRes.data || []);
+      if (vehRes.data && vehRes.data.length > 0) setVehicleId(vehRes.data[0].id);
+      if (drvRes.data && drvRes.data.length > 0) setDriverId(drvRes.data[0].id);
     }).catch(() => {})
       .finally(() => setLoading(false));
   };
@@ -91,7 +91,7 @@ export default function VehicleTrips() {
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
-            {trips.map((t) => (
+            {Array.isArray(trips) && trips.map((t) => (
               <tr key={t.id} className="hover:bg-base-800/50">
                 <td className="px-4 py-3">{t.date}</td>
                 <td className="px-4 py-3 font-semibold text-amber-400">{t.vehicle_number}</td>
@@ -112,7 +112,7 @@ export default function VehicleTrips() {
                 </td>
               </tr>
             ))}
-            {trips.length === 0 && (
+            {(!Array.isArray(trips) || trips.length === 0) && (
               <tr><td colSpan={9} className="px-4 py-6 text-center text-ink-500">No vehicle trips logged.</td></tr>
             )}
           </tbody>
