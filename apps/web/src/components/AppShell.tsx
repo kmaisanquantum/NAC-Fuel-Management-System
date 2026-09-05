@@ -32,6 +32,19 @@ const NAV_GROUPS: { title: string; items: { to: string; label: string }[] }[] = 
     ],
   },
   {
+    title: "Fleet Management",
+    items: [
+      { to: "/fleet", label: "Fleet Dashboard" },
+      { to: "/vehicles", label: "Vehicles Register" },
+      { to: "/drivers", label: "Driver Register" },
+      { to: "/fleet-allocations", label: "Allocations" },
+      { to: "/fleet-fuel", label: "Vehicle Fuel Logs" },
+      { to: "/fleet-trips", label: "Trips & Mileage" },
+      { to: "/fleet-inspections", label: "Daily Inspections" },
+      { to: "/fleet-maintenance", label: "Maintenance & Repairs" },
+    ],
+  },
+  {
     title: "Commercial",
     items: [
       { to: "/billing", label: "Billing & Invoices" },

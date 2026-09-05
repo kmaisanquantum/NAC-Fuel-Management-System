@@ -23,6 +23,14 @@ import Users from "./pages/Users";
 import IoTDevices from "./pages/IoTDevices";
 import MapView from "./pages/MapView";
 import Settings from "./pages/Settings";
+import FleetDashboard from "./pages/FleetDashboard";
+import Vehicles from "./pages/Vehicles";
+import Drivers from "./pages/Drivers";
+import VehicleAllocations from "./pages/VehicleAllocations";
+import VehicleFuelLogs from "./pages/VehicleFuelLogs";
+import VehicleTrips from "./pages/VehicleTrips";
+import VehicleInspections from "./pages/VehicleInspections";
+import VehicleMaintenancePage from "./pages/VehicleMaintenance";
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const { user, loading } = useAuth();
@@ -56,6 +64,16 @@ function AppRoutes() {
         <Route path="/maintenance" element={<Maintenance />} />
         <Route path="/quality" element={<Quality />} />
         <Route path="/iot" element={<IoTDevices />} />
+
+        {/* Fleet Routes */}
+        <Route path="/fleet" element={<FleetDashboard />} />
+        <Route path="/vehicles" element={<Vehicles />} />
+        <Route path="/drivers" element={<Drivers />} />
+        <Route path="/fleet-allocations" element={<VehicleAllocations />} />
+        <Route path="/fleet-fuel" element={<VehicleFuelLogs />} />
+        <Route path="/fleet-trips" element={<VehicleTrips />} />
+        <Route path="/fleet-inspections" element={<VehicleInspections />} />
+        <Route path="/fleet-maintenance" element={<VehicleMaintenancePage />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/suppliers" element={<Suppliers />} />
         <Route path="/airlines" element={<Airlines />} />
