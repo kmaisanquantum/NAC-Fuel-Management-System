@@ -15,9 +15,9 @@ export default function Drivers() {
   const [licenceExpiry, setLicenceExpiry] = useState("2027-12-31");
 
   const fetchDrivers = () => {
-    api.get<Driver[]>("/drivers")
-      .then((res) => setDrivers(res))
-      .catch(() => {})
+    api.get<{ data: Driver[] }>("/drivers")
+      .then((res) => setDrivers(res.data || []))
+      .catch(() => setDrivers([]))
       .finally(() => setLoading(false));
   };
 
@@ -70,7 +70,7 @@ export default function Drivers() {
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
-            {drivers.map((d) => (
+            {Array.isArray(drivers) && drivers.map((d) => (
               <tr key={d.id} className="hover:bg-base-800/50">
                 <td className="px-4 py-3 font-semibold text-amber-400">{d.employee_number}</td>
                 <td className="px-4 py-3 font-medium">{d.name}</td>
@@ -85,7 +85,7 @@ export default function Drivers() {
                 </td>
               </tr>
             ))}
-            {drivers.length === 0 && (
+            {(!Array.isArray(drivers) || drivers.length === 0) && (
               <tr><td colSpan={7} className="px-4 py-6 text-center text-ink-500">No drivers registered yet.</td></tr>
             )}
           </tbody>

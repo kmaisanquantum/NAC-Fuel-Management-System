@@ -17,15 +17,15 @@ export default function VehicleAllocations() {
 
   const fetchData = () => {
     Promise.all([
-      api.get<VehicleAllocation[]>("/vehicle-allocations"),
-      api.get<Vehicle[]>("/vehicles"),
-      api.get<Driver[]>("/drivers"),
+      api.get<{ data: VehicleAllocation[] }>("/vehicle-allocations"),
+      api.get<{ data: Vehicle[] }>("/vehicles"),
+      api.get<{ data: Driver[] }>("/drivers"),
     ]).then(([allocRes, vehRes, drvRes]) => {
-      setAllocations(allocRes);
-      setVehicles(vehRes);
-      setDrivers(drvRes);
-      if (vehRes.length > 0) setVehicleId(vehRes[0].id);
-      if (drvRes.length > 0) setDriverId(drvRes[0].id);
+      setAllocations(allocRes.data || []);
+      setVehicles(vehRes.data || []);
+      setDrivers(drvRes.data || []);
+      if (vehRes.data && vehRes.data.length > 0) setVehicleId(vehRes.data[0].id);
+      if (drvRes.data && drvRes.data.length > 0) setDriverId(drvRes.data[0].id);
     }).catch(() => {})
       .finally(() => setLoading(false));
   };
@@ -78,7 +78,7 @@ export default function VehicleAllocations() {
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
-            {allocations.map((a) => (
+            {Array.isArray(allocations) && allocations.map((a) => (
               <tr key={a.id} className="hover:bg-base-800/50">
                 <td className="px-4 py-3 font-semibold text-amber-400">{a.vehicle_number}</td>
                 <td className="px-4 py-3">{a.department || "—"}</td>
@@ -92,7 +92,7 @@ export default function VehicleAllocations() {
                 </td>
               </tr>
             ))}
-            {allocations.length === 0 && (
+            {(!Array.isArray(allocations) || allocations.length === 0) && (
               <tr><td colSpan={6} className="px-4 py-6 text-center text-ink-500">No vehicle allocations recorded.</td></tr>
             )}
           </tbody>

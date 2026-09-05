@@ -7,8 +7,8 @@ export default function FleetDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get<FleetSummary>("/fleet-dashboard/summary")
-      .then((res) => setSummary(res))
+    api.get<{ data: FleetSummary }>("/fleet-dashboard/summary")
+      .then((res) => setSummary(res.data))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);

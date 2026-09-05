@@ -16,7 +16,7 @@ export default function Login() {
     setBusy(true);
     try {
       await login(email, password);
-      navigate("/national");
+      navigate("/fleet");
     } catch (err: any) {
       setError(err.message || "Login failed");
     } finally {
