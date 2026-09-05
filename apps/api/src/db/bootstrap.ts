@@ -11,6 +11,12 @@ export function ensureBootstrapAccounts() {
   const rolesToEnsure = [
     { name: "nac_admin", desc: "NAC Administrator" },
     { name: "fuel_operator", desc: "Fuel Operator" },
+    { name: "fleet_admin", desc: "Fleet Administrator" },
+    { name: "fleet_manager", desc: "Fleet Manager" },
+    { name: "department_manager", desc: "Department Manager" },
+    { name: "driver", desc: "Driver" },
+    { name: "finance", desc: "Finance" },
+    { name: "management", desc: "Management" },
   ];
 
   const roleMap: Record<string, string> = {};

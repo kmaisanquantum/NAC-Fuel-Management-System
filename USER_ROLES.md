@@ -17,6 +17,12 @@ requirements) and airport-scoping via `scopeToAirport()`.
 | `safety_regulatory_officer` | Assigned airport | Fuel quality, inspections, incidents, compliance |
 | `auditor` | National, read-only | Transactions and audit trail |
 | `executive` | National, read-only | National dashboards and reports |
+| `fleet_admin` | National | Full fleet module administration |
+| `fleet_manager` | National / Airport | Manage vehicle fleet, allocations, fuel, and maintenance |
+| `department_manager` | Department | Request and manage department vehicle allocations |
+| `driver` | Assigned vehicle | Vehicle operations, trip logs, fuel logs, daily inspections |
+| `finance` | National | Fleet cost, fuel expense, and valuation oversight |
+| `management` | National | Fleet executive reporting and KPIs |
 
 ## Airport scoping
 

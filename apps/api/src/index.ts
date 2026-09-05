@@ -33,6 +33,14 @@ import auditRoutes from "./routes/audit";
 import iotRoutes from "./routes/iot";
 import reportRoutes from "./routes/reports";
 import userRoutes from "./routes/users";
+import vehicleRoutes from "./routes/vehicles";
+import driverRoutes from "./routes/drivers";
+import vehicleAllocationRoutes from "./routes/vehicleAllocations";
+import vehicleFuelLogRoutes from "./routes/vehicleFuelLogs";
+import vehicleTripRoutes from "./routes/vehicleTrips";
+import vehicleInspectionRoutes from "./routes/vehicleInspections";
+import vehicleMaintenanceRoutes from "./routes/vehicleMaintenance";
+import fleetDashboardRoutes from "./routes/fleetDashboard";
 
 initSchema();
 ensureBootstrapAccounts();
@@ -74,6 +82,14 @@ app.use("/api/v1/audit-logs", auditRoutes);
 app.use("/api/v1/iot", iotRoutes);
 app.use("/api/v1/reports", reportRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/vehicles", vehicleRoutes);
+app.use("/api/v1/drivers", driverRoutes);
+app.use("/api/v1/vehicle-allocations", vehicleAllocationRoutes);
+app.use("/api/v1/vehicle-fuel-logs", vehicleFuelLogRoutes);
+app.use("/api/v1/vehicle-trips", vehicleTripRoutes);
+app.use("/api/v1/vehicle-inspections", vehicleInspectionRoutes);
+app.use("/api/v1/vehicle-maintenance", vehicleMaintenanceRoutes);
+app.use("/api/v1/fleet-dashboard", fleetDashboardRoutes);
 
 const webDir = process.env.WEB_DIR || path.join(__dirname, "public");
 if (fs.existsSync(webDir)) {
