@@ -274,3 +274,18 @@ export interface FleetSummary {
     openBreakdowns: number;
   };
 }
+
+export interface DivisionConsumption {
+  department: string;
+  refuelCount: number;
+  totalLitres: number;
+  totalFuelCost: number;
+  totalKm: number;
+  vehicleCount: number;
+}
+
+export interface DailyMileage {
+  department: string;
+  date: string;
+  totalKm: number;
+}

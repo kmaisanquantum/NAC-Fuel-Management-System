@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import AppShell from "./components/AppShell";
 import Login from "./pages/Login";
 import FleetDashboard from "./pages/FleetDashboard";
+import DivisionConsumption from "./pages/DivisionConsumption";
 import Vehicles from "./pages/Vehicles";
 import Drivers from "./pages/Drivers";
 import VehicleAllocations from "./pages/VehicleAllocations";
@@ -36,6 +37,7 @@ function AppRoutes() {
       >
         <Route path="/" element={<Navigate to="/fleet" replace />} />
         <Route path="/fleet" element={<FleetDashboard />} />
+        <Route path="/fleet-consumption" element={<DivisionConsumption />} />
         <Route path="/vehicles" element={<Vehicles />} />
         <Route path="/drivers" element={<Drivers />} />
         <Route path="/fleet-allocations" element={<VehicleAllocations />} />
