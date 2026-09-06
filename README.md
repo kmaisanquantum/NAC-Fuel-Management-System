@@ -1,4 +1,4 @@
-# NAC Fuel Management System
+# Fuel Management System
 
 A national, multi-airport aviation fuel management platform prototype for the
 Papua New Guinea National Airports Corporation (NAC).
@@ -44,8 +44,8 @@ npm run dev      # http://localhost:5173 (proxies /api to :4000)
 Log in with the seeded demo account:
 
 ```
-email:    admin@nac.gov.pg
-password: Password123!
+email:    admin@dspng.tech
+password: Admin@123!
 ```
 
 Other seeded accounts (`{role}@nac.gov.pg`, same password) let you explore

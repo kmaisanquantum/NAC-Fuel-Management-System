@@ -5,7 +5,7 @@ import { requireRole } from "../middleware/rbac";
 
 const router = Router();
 router.use(requireAuth);
-router.use(requireRole("nac_admin", "auditor", "national_fuel_manager", "executive"));
+router.use(requireRole("admin", "auditor", "national_fuel_manager", "executive"));
 
 router.get("/", (req, res) => {
   const { entity, entityId, userId, limit } = req.query;

@@ -11,7 +11,7 @@ services:
       NODE_ENV: production
       PORT: 4000
       JWT_SECRET: ${JWT_SECRET:-change-me-to-a-long-random-string-in-production}
-      DB_PATH: /app/data/nac_fms.db
+      DB_PATH: /app/data/fms.db
       CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8080}
       MAX_ALLOWED_VARIANCE_PCT: ${MAX_ALLOWED_VARIANCE_PCT:-0.5}
     volumes:

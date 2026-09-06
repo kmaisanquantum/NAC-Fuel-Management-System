@@ -4,21 +4,45 @@ import { useAuth } from "../context/AuthContext";
 
 const NAV_GROUPS: { title: string; items: { to: string; label: string }[] }[] = [
   {
-    title: "Fleet Management",
+    title: "Overview",
     items: [
-      { to: "/fleet", label: "Fleet Dashboard" },
-      { to: "/vehicles", label: "Vehicles Register" },
-      { to: "/drivers", label: "Driver Register" },
-      { to: "/fleet-allocations", label: "Allocations" },
-      { to: "/fleet-fuel", label: "Vehicle Fuel Logs" },
-      { to: "/fleet-trips", label: "Trips & Mileage" },
-      { to: "/fleet-inspections", label: "Daily Inspections" },
-      { to: "/fleet-maintenance", label: "Maintenance & Repairs" },
+      { to: "/national", label: "National Dashboard" },
+      { to: "/airport", label: "Airport Dashboard" },
+      { to: "/map", label: "Map View" },
+    ],
+  },
+  {
+    title: "Fuel Operations",
+    items: [
+      { to: "/receipts", label: "Fuel Receipts" },
+      { to: "/transfers", label: "Fuel Transfers" },
+      { to: "/uplifts", label: "Aircraft Uplift" },
+      { to: "/inventory", label: "Inventory" },
+      { to: "/reconciliation", label: "Reconciliation" },
+    ],
+  },
+  {
+    title: "Assets",
+    items: [
+      { to: "/tanks", label: "Tanks" },
+      { to: "/refuellers", label: "Refuellers" },
+      { to: "/maintenance", label: "Maintenance" },
+      { to: "/quality", label: "Fuel Quality" },
+      { to: "/iot", label: "IoT Devices" },
+    ],
+  },
+  {
+    title: "Commercial",
+    items: [
+      { to: "/billing", label: "Billing & Invoices" },
+      { to: "/suppliers", label: "Suppliers" },
+      { to: "/airlines", label: "Airlines & Aircraft" },
     ],
   },
   {
     title: "Administration",
     items: [
+      { to: "/airports", label: "Airports" },
       { to: "/alerts", label: "Alerts" },
       { to: "/audit", label: "Audit Logs" },
       { to: "/users", label: "Users & Roles" },
@@ -76,6 +100,7 @@ export default function AppShell() {
           <div>
             <div className="font-display font-semibold text-lg leading-tight text-ink-100">Fuel</div>
             <div className="font-display font-semibold text-lg leading-tight text-amber-400">Management System</div>
+            <div className="text-[10px] uppercase tracking-widest text-ink-500 mt-1">Fleet & Operations Platform</div>
           </div>
           <button
             type="button"

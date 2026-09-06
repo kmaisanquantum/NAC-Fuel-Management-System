@@ -67,8 +67,8 @@ never by editing history.
 
 ## Reference number scheme
 
-`NAC-<AIRPORT_CODE>-<TYPE>-<YYYYMMDD>-<sequence>`, e.g.
-`NAC-POM-UPL-20260815-000123`. Generated in `utils/reference.ts` from a
+`FMS-<AIRPORT_CODE>-<TYPE>-<YYYYMMDD>-<sequence>`, e.g.
+`FMS-POM-UPL-20260815-000123`. Generated in `utils/reference.ts` from a
 per-day, per-airport, per-type count. `TYPE` is one of `RCT` (receipt),
 `TRF` (transfer), `UPL` (uplift), `INV` (invoice).
 

@@ -1,7 +1,7 @@
 const BASE_URL = "/api/v1";
 
 function getToken(): string | null {
-  return localStorage.getItem("nac_access_token");
+  return localStorage.getItem("fms_access_token");
 }
 
 export class ApiClientError extends Error {
@@ -38,6 +38,6 @@ export const api = {
 };
 
 export function setToken(token: string | null) {
-  if (token) localStorage.setItem("nac_access_token", token);
-  else localStorage.removeItem("nac_access_token");
+  if (token) localStorage.setItem("fms_access_token", token);
+  else localStorage.removeItem("fms_access_token");
 }

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import path from "path";
 
-process.env.DB_PATH = path.join(__dirname, "../../data/test_nac_fms.db");
+process.env.DB_PATH = path.join(__dirname, "../../data/test_fms.db");
 
 import { db, initSchema } from "../src/db";
 import { postInventoryMovement, getTankBalance } from "../src/services/inventoryService";

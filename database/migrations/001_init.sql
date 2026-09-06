@@ -1,4 +1,4 @@
--- NAC Fuel Management System — Production Schema (PostgreSQL)
+-- Fuel Management System — Production Schema (PostgreSQL)
 -- Migration 001: initial schema
 --
 -- This is the production-target schema referenced in DATABASE.md. The MVP's

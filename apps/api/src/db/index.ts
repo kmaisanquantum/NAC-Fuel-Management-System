@@ -5,7 +5,7 @@ import path from "path";
 // NOTE: SQLite is used here to make the MVP runnable without external infra.
 // Production deployment uses PostgreSQL — see /database/migrations/001_init.sql
 // which defines the equivalent schema with proper UUID/TIMESTAMP/NUMERIC types.
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, "../../data/nac_fms.db");
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, "../../data/fms.db");
 
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
