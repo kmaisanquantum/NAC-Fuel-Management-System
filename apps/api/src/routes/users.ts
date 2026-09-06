@@ -9,7 +9,7 @@ import { writeAudit } from "../utils/audit";
 
 const router = Router();
 router.use(requireAuth);
-router.use(requireRole("nac_admin"));
+router.use(requireRole("admin"));
 
 router.get("/", (_req, res) => {
   const rows = db.prepare(`

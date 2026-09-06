@@ -34,20 +34,20 @@ export default function FleetDashboard() {
 
         <div className="panel p-5 space-y-1">
           <div className="text-xs font-medium text-ink-400 uppercase tracking-wider">Total Distance (km)</div>
-          <div className="text-3xl font-display font-bold text-amber-400">{(summary?.metrics.totalKm || 0).toLocaleString()} km</div>
+          <div className="text-3xl font-display font-bold text-amber-400">{(summary?.metrics?.totalKm || 0).toLocaleString()} km</div>
           <div className="text-xs text-ink-400">Recorded across all trip logs</div>
         </div>
 
         <div className="panel p-5 space-y-1">
           <div className="text-xs font-medium text-ink-400 uppercase tracking-wider">Fuel Expense (PGK)</div>
-          <div className="text-3xl font-display font-bold text-ink-100">K{(summary?.metrics.totalFuelCost || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-          <div className="text-xs text-ink-400">{(summary?.metrics.totalFuelLitres || 0).toLocaleString()} Litres consumed</div>
+          <div className="text-3xl font-display font-bold text-ink-100">K{(summary?.metrics?.totalFuelCost || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+          <div className="text-xs text-ink-400">{(summary?.metrics?.totalFuelLitres || 0).toLocaleString()} Litres consumed</div>
         </div>
 
         <div className="panel p-5 space-y-1">
           <div className="text-xs font-medium text-ink-400 uppercase tracking-wider">Maintenance & Repair Cost</div>
-          <div className="text-3xl font-display font-bold text-ink-100">K{(summary?.metrics.totalMaintenanceCost || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-          <div className="text-xs text-ink-400">{summary?.metrics.openBreakdowns || 0} open breakdowns</div>
+          <div className="text-3xl font-display font-bold text-ink-100">K{(summary?.metrics?.totalMaintenanceCost || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+          <div className="text-xs text-ink-400">{summary?.metrics?.openBreakdowns || 0} open breakdowns</div>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export default function FleetDashboard() {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-ink-300">Open Breakdown Reports</span>
-              <span className="font-semibold text-signal-red">{summary?.metrics.openBreakdowns || 0}</span>
+              <span className="font-semibold text-signal-red">{summary?.metrics?.openBreakdowns || 0}</span>
             </div>
           </div>
         </div>

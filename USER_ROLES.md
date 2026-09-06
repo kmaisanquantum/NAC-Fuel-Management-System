@@ -6,7 +6,7 @@ requirements) and airport-scoping via `scopeToAirport()`.
 
 | Role | Scope | Typical permissions |
 |---|---|---|
-| `nac_admin` | National | Full system administration; user management; all master data |
+| `admin` | National | Full system administration; user management; all master data |
 | `national_fuel_manager` | National | National visibility, airport creation, receipt approval |
 | `airport_fuel_manager` | Assigned airport | Manage fuel operations for their airport; approve receipts/transfers |
 | `fuel_operator` | Assigned airport | Record receipts, transfers, aircraft uplift |
@@ -17,12 +17,6 @@ requirements) and airport-scoping via `scopeToAirport()`.
 | `safety_regulatory_officer` | Assigned airport | Fuel quality, inspections, incidents, compliance |
 | `auditor` | National, read-only | Transactions and audit trail |
 | `executive` | National, read-only | National dashboards and reports |
-| `fleet_admin` | National | Full fleet module administration |
-| `fleet_manager` | National / Airport | Manage vehicle fleet, allocations, fuel, and maintenance |
-| `department_manager` | Department | Request and manage department vehicle allocations |
-| `driver` | Assigned vehicle | Vehicle operations, trip logs, fuel logs, daily inspections |
-| `finance` | National | Fleet cost, fuel expense, and valuation oversight |
-| `management` | National | Fleet executive reporting and KPIs |
 
 ## Airport scoping
 
@@ -30,7 +24,7 @@ Roles tied to a single airport (`airport_fuel_manager`, `fuel_operator`,
 `airport_manager`, `engineering_maintenance`, `safety_regulatory_officer`)
 carry an `airport_id` on their user record and are blocked from acting on
 other airports' data by `scopeToAirport()`. National-level roles
-(`nac_admin`, `national_fuel_manager`, `executive`, `auditor`,
+(`admin`, `national_fuel_manager`, `executive`, `auditor`,
 `finance_officer`, `procurement_officer`) are not airport-scoped.
 
 ## Adding a new role

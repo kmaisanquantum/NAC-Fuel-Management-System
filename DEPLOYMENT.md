@@ -28,7 +28,7 @@ Coolify is a self-hosted PaaS that uses Traefik as a reverse proxy to route doma
    - `JWT_SECRET`: A long, secure random string.
    - `CORS_ORIGIN`: Your public frontend domain (e.g., `https://nac-fms.example.com`).
    - `MAX_ALLOWED_VARIANCE_PCT`: `0.5` (or as required).
-4. **Persistent Volume**: Ensure the named volume `api-data` is retained so the SQLite database (`/app/data/nac_fms.db`) persists across redeployments.
+4. **Persistent Volume**: Ensure the named volume `api-data` is retained so the SQLite database (`/app/data/fms.db`) persists across redeployments.
 5. **Database Seeding**: After the initial deployment, run the one-off seed job using the `tools` profile to populate demo data via the Coolify terminal/exec interface or command line:
    ```bash
    docker compose --profile tools run --rm seed

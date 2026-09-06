@@ -2,10 +2,9 @@ import { Request, Response, NextFunction } from "express";
 
 /**
  * Role-Based Access Control.
- * Roles per USER_ROLES.md: nac_admin, national_fuel_manager, airport_fuel_manager,
+ * Roles per USER_ROLES.md: admin, national_fuel_manager, airport_fuel_manager,
  * fuel_operator, airport_manager, finance_officer, procurement_officer,
- * engineering_maintenance, safety_regulatory_officer, auditor, executive,
- * fleet_admin, fleet_manager, department_manager, driver, finance, management.
+ * engineering_maintenance, safety_regulatory_officer, auditor, executive.
  */
 export function requireRole(...allowedRoles: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -19,20 +18,16 @@ export function requireRole(...allowedRoles: string[]) {
 
 /**
  * Restricts non-national roles to their assigned airport.
- * National-level roles (nac_admin, national_fuel_manager, executive, auditor,
+ * National-level roles (admin, national_fuel_manager, executive, auditor,
  * finance_officer, procurement_officer) may access all airports.
  */
 const NATIONAL_ROLES = new Set([
-  "nac_admin",
+  "admin",
   "national_fuel_manager",
   "executive",
   "auditor",
   "finance_officer",
   "procurement_officer",
-  "fleet_admin",
-  "fleet_manager",
-  "finance",
-  "management",
 ]);
 
 export function scopeToAirport(getAirportId: (req: Request) => string | undefined) {

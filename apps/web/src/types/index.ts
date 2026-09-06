@@ -150,8 +150,6 @@ export interface VehicleAllocation {
   id: string;
   vehicle_id: string;
   vehicle_number?: string;
-  make?: string;
-  model?: string;
   department: string | null;
   custodian: string | null;
   driver_id: string | null;
@@ -210,8 +208,6 @@ export interface VehicleInspection {
   id: string;
   vehicle_id: string;
   vehicle_number?: string;
-  make?: string;
-  model?: string;
   inspector_id: string | null;
   inspector_name: string;
   inspection_date: string;
@@ -225,8 +221,6 @@ export interface VehicleMaintenance {
   id: string;
   vehicle_id: string;
   vehicle_number?: string;
-  make?: string;
-  model?: string;
   maintenance_type: "scheduled_service" | "unscheduled_repair" | "inspection_fix" | "other";
   description: string;
   scheduled_date: string | null;
@@ -239,32 +233,40 @@ export interface VehicleMaintenance {
   created_at: string;
 }
 
-export interface VehicleBreakdown {
-  id: string;
-  vehicle_id: string;
-  vehicle_number?: string;
-  driver_id: string | null;
-  driver_name?: string;
-  breakdown_date: string;
-  location: string;
-  description: string;
-  towing_required: number;
-  status: "reported" | "in_repair" | "resolved";
-  resolution_notes: string | null;
-  created_at: string;
-}
-
 export interface FleetSummary {
   vehicles: {
     total: number;
     active: number;
-    inactive: number;
     underRepair: number;
+    inactive: number;
   };
   drivers: {
+    total: number;
     authorised: number;
   };
-  metrics: {
+  allocations: {
+    active: number;
+  };
+  inspections: {
+    recentPass: number;
+    recentFail: number;
+  };
+  fuel: {
+    monthlyTotalLitres: number;
+    monthlyTotalCost: number;
+    avgLPer100Km: number;
+  };
+  metrics?: {
+    totalVehicles: number;
+    activeVehicles: number;
+    underRepairVehicles: number;
+    authorisedDrivers: number;
+    totalDrivers: number;
+    activeAllocations: number;
+    recentPassInspections: number;
+    monthlyFuelLitres: number;
+    monthlyFuelCost: number;
+    avgFuelConsumption: number;
     totalKm: number;
     totalFuelCost: number;
     totalFuelLitres: number;

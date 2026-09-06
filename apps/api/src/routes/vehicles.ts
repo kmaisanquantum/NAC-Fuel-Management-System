@@ -9,7 +9,7 @@ import { writeAudit } from "../utils/audit";
 const router = Router();
 router.use(requireAuth);
 
-const FLEET_WRITE_ROLES = ["nac_admin", "fleet_admin", "fleet_manager"];
+const FLEET_WRITE_ROLES = ["admin", "fleet_admin", "fleet_manager"];
 
 router.get("/", (req, res) => {
   const { status, department } = req.query;

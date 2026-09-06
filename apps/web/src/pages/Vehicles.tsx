@@ -117,7 +117,7 @@ export default function Vehicles() {
                 </div>
                 <div>
                   <label className="label">Registration # *</label>
-                  <input className="input" value={registrationNumber} onChange={(e) => setRegistrationNumber(e.target.value)} required placeholder="P2-NAC05" />
+                  <input className="input" value={registrationNumber} onChange={(e) => setRegistrationNumber(e.target.value)} required placeholder="FLEET-005" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">

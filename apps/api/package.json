@@ -1,7 +1,7 @@
 {
   "name": "@nac-fms/api",
   "version": "0.1.0",
-  "description": "NAC Fuel Management System - Backend API",
+  "description": "Fuel Management System - Backend API",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",

@@ -24,17 +24,17 @@ Access tokens expire in 15 minutes; refresh tokens in 7 days.
 |---|---|---|
 | GET | `/` | any authenticated |
 | GET | `/:id` | any authenticated |
-| POST | `/` | nac_admin, national_fuel_manager |
-| PATCH | `/:id` | nac_admin, national_fuel_manager |
+| POST | `/` | admin, national_fuel_manager |
+| PATCH | `/:id` | admin, national_fuel_manager |
 
 ## Fuel products — `/api/v1/fuel-products`
-GET (all), POST (nac_admin, national_fuel_manager).
+GET (all), POST (admin, national_fuel_manager).
 
 ## Tanks — `/api/v1/tanks`
 GET `?airportId=`, GET `/:id`, GET `/:id/ledger`, POST, POST `/:id/reading`.
 
 ## Suppliers — `/api/v1/suppliers`
-GET, GET `/:id`, GET `/:id/performance`, POST (nac_admin, procurement_officer).
+GET, GET `/:id`, GET `/:id/performance`, POST (admin, procurement_officer).
 
 ## Refuellers — `/api/v1/refuellers`
 GET `?airportId=`, POST, PATCH `/:id/status`.
@@ -107,11 +107,11 @@ GET `?airportId=&status=&severity=`, POST `/:id/resolve`, POST `/:id/assign`.
 `/readings` (POST — simulated ingest; see IOT_INTEGRATION.md).
 
 ## Audit logs — `/api/v1/audit-logs`
-GET `?entity=&entityId=&userId=&limit=` — restricted to nac_admin, auditor,
+GET `?entity=&entityId=&userId=&limit=` — restricted to admin, auditor,
 national_fuel_manager, executive.
 
 ## Users — `/api/v1/users`
-Restricted to nac_admin. GET `/`, GET `/roles`, POST `/`, PATCH `/:id/role`,
+Restricted to admin. GET `/`, GET `/roles`, POST `/`, PATCH `/:id/role`,
 PATCH `/:id/status`.
 
 ## Cross-cutting behaviour
