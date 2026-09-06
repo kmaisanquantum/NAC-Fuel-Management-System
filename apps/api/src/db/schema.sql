@@ -1,6 +1,4 @@
--- Fleet Management System
--- Demo/dev schema (SQLite). Production schema is PostgreSQL: see /database/migrations/001_init.sql
--- Types are simplified for SQLite (TEXT for UUID/timestamps, REAL for numerics, INTEGER 0/1 for booleans).
+-- Fuel Management System Schema (Fleet Focus)
 
 PRAGMA foreign_keys = ON;
 
@@ -29,334 +27,18 @@ CREATE TABLE IF NOT EXISTS users (
   password_hash TEXT NOT NULL,
   full_name TEXT NOT NULL,
   role_id TEXT NOT NULL REFERENCES roles(id),
-  airport_id TEXT REFERENCES airports(id),
+  airport_id TEXT,
   status TEXT NOT NULL DEFAULT 'active',
   created_at TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at TEXT NOT NULL DEFAULT (datetime('now')),
   created_by TEXT,
   updated_by TEXT
-);
-
-CREATE TABLE IF NOT EXISTS airports (
-  id TEXT PRIMARY KEY,
-  code TEXT UNIQUE NOT NULL,
-  iata_code TEXT,
-  name TEXT NOT NULL,
-  region TEXT,
-  latitude REAL,
-  longitude REAL,
-  status TEXT NOT NULL DEFAULT 'active',
-  connectivity_profile TEXT NOT NULL DEFAULT 'online',
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
-  created_by TEXT,
-  updated_by TEXT
-);
-
-CREATE TABLE IF NOT EXISTS fuel_facilities (
-  id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  name TEXT NOT NULL,
-  facility_code TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'active',
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS fuel_products (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  code TEXT UNIQUE NOT NULL,
-  fuel_type TEXT NOT NULL,
-  unit_of_measure TEXT NOT NULL DEFAULT 'L',
-  density REAL,
-  minimum_stock REAL NOT NULL DEFAULT 0,
-  maximum_stock REAL NOT NULL DEFAULT 0,
-  safety_stock REAL NOT NULL DEFAULT 0,
-  active INTEGER NOT NULL DEFAULT 1,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS suppliers (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  contact_name TEXT,
-  contact_email TEXT,
-  contact_phone TEXT,
-  contract_ref TEXT,
-  contract_start TEXT,
-  contract_expiry TEXT,
-  active INTEGER NOT NULL DEFAULT 1,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS customers (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  customer_type TEXT NOT NULL DEFAULT 'airline',
-  billing_email TEXT,
-  active INTEGER NOT NULL DEFAULT 1,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS airlines (
-  id TEXT PRIMARY KEY,
-  customer_id TEXT REFERENCES customers(id),
-  name TEXT NOT NULL,
-  iata_code TEXT,
-  active INTEGER NOT NULL DEFAULT 1,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS aircraft (
-  id TEXT PRIMARY KEY,
-  airline_id TEXT REFERENCES airlines(id),
-  registration TEXT UNIQUE NOT NULL,
-  aircraft_type TEXT,
-  active INTEGER NOT NULL DEFAULT 1,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS tanks (
-  id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  fuel_facility_id TEXT NOT NULL REFERENCES fuel_facilities(id),
-  fuel_product_id TEXT NOT NULL REFERENCES fuel_products(id),
-  tank_code TEXT NOT NULL,
-  capacity REAL NOT NULL,
-  current_level REAL NOT NULL DEFAULT 0,
-  temperature REAL,
-  water_level REAL,
-  status TEXT NOT NULL DEFAULT 'active',
-  installation_date TEXT,
-  last_inspection TEXT,
-  next_inspection TEXT,
-  calibration_date TEXT,
-  next_calibration TEXT,
-  maintenance_status TEXT NOT NULL DEFAULT 'ok',
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS refuellers (
-  id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  asset_code TEXT UNIQUE NOT NULL,
-  registration TEXT,
-  capacity REAL NOT NULL,
-  fuel_product_id TEXT REFERENCES fuel_products(id),
-  current_level REAL NOT NULL DEFAULT 0,
-  status TEXT NOT NULL DEFAULT 'active',
-  last_maintenance TEXT,
-  next_maintenance TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS meters (
-  id TEXT PRIMARY KEY,
-  refueller_id TEXT REFERENCES refuellers(id),
-  meter_code TEXT NOT NULL,
-  last_calibration TEXT,
-  next_calibration TEXT,
-  status TEXT NOT NULL DEFAULT 'active'
-);
-
--- Immutable fuel receipt records (workflow: draft -> submitted -> verified -> approved -> posted)
-CREATE TABLE IF NOT EXISTS fuel_receipts (
-  id TEXT PRIMARY KEY,
-  reference TEXT UNIQUE NOT NULL,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  supplier_id TEXT NOT NULL REFERENCES suppliers(id),
-  tank_id TEXT NOT NULL REFERENCES tanks(id),
-  fuel_product_id TEXT NOT NULL REFERENCES fuel_products(id),
-  quantity REAL NOT NULL,
-  delivery_vehicle TEXT,
-  driver_name TEXT,
-  delivery_document TEXT,
-  batch_number TEXT,
-  meter_reading REAL,
-  quality_cert_ref TEXT,
-  status TEXT NOT NULL DEFAULT 'draft',
-  receiving_officer_id TEXT REFERENCES users(id),
-  approved_by TEXT REFERENCES users(id),
-  approved_at TEXT,
-  posted_at TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
-  created_by TEXT,
-  updated_by TEXT
-);
-
-CREATE TABLE IF NOT EXISTS fuel_transfers (
-  id TEXT PRIMARY KEY,
-  reference TEXT UNIQUE NOT NULL,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  destination_airport_id TEXT REFERENCES airports(id),
-  source_type TEXT NOT NULL,
-  source_id TEXT NOT NULL,
-  destination_type TEXT NOT NULL,
-  destination_id TEXT NOT NULL,
-  fuel_product_id TEXT NOT NULL REFERENCES fuel_products(id),
-  quantity REAL NOT NULL,
-  source_meter_reading REAL,
-  destination_meter_reading REAL,
-  reason TEXT,
-  status TEXT NOT NULL DEFAULT 'pending_approval',
-  operator_id TEXT REFERENCES users(id),
-  approved_by TEXT REFERENCES users(id),
-  approved_at TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  created_by TEXT
-);
-
-CREATE TABLE IF NOT EXISTS fuel_uplifts (
-  id TEXT PRIMARY KEY,
-  reference TEXT UNIQUE NOT NULL,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  airline_id TEXT NOT NULL REFERENCES airlines(id),
-  aircraft_id TEXT NOT NULL REFERENCES aircraft(id),
-  flight_number TEXT,
-  fuel_product_id TEXT NOT NULL REFERENCES fuel_products(id),
-  refueller_id TEXT NOT NULL REFERENCES refuellers(id),
-  tank_id TEXT NOT NULL REFERENCES tanks(id),
-  quantity REAL NOT NULL,
-  start_meter_reading REAL,
-  end_meter_reading REAL,
-  price_per_litre REAL NOT NULL,
-  total_amount REAL NOT NULL,
-  operator_id TEXT REFERENCES users(id),
-  customer_authorisation TEXT,
-  invoice_status TEXT NOT NULL DEFAULT 'not_invoiced',
-  status TEXT NOT NULL DEFAULT 'completed',
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  created_by TEXT
-);
-
--- Immutable inventory ledger: every movement is a row, current stock is derived/cached in inventory_balances
-CREATE TABLE IF NOT EXISTS inventory_transactions (
-  id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  tank_id TEXT NOT NULL REFERENCES tanks(id),
-  fuel_product_id TEXT NOT NULL REFERENCES fuel_products(id),
-  txn_type TEXT NOT NULL, -- RECEIPT, TRANSFER_IN, TRANSFER_OUT, AIRCRAFT_UPLIFT, RETURN, ADJUSTMENT, LOSS, CORRECTION
-  quantity REAL NOT NULL, -- positive for inbound, negative for outbound
-  reference_type TEXT NOT NULL, -- fuel_receipt | fuel_transfer | fuel_uplift | manual_adjustment
-  reference_id TEXT,
-  balance_after REAL NOT NULL,
-  reason TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  created_by TEXT
-);
-
-CREATE TABLE IF NOT EXISTS inventory_balances (
-  tank_id TEXT PRIMARY KEY REFERENCES tanks(id),
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  fuel_product_id TEXT NOT NULL REFERENCES fuel_products(id),
-  current_level REAL NOT NULL DEFAULT 0,
-  last_updated TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS reconciliations (
-  id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  tank_id TEXT NOT NULL REFERENCES tanks(id),
-  recon_date TEXT NOT NULL,
-  opening_stock REAL NOT NULL,
-  receipts REAL NOT NULL DEFAULT 0,
-  transfers_in REAL NOT NULL DEFAULT 0,
-  transfers_out REAL NOT NULL DEFAULT 0,
-  aircraft_uplift REAL NOT NULL DEFAULT 0,
-  adjustments REAL NOT NULL DEFAULT 0,
-  expected_closing REAL NOT NULL,
-  actual_closing REAL,
-  variance REAL,
-  variance_pct REAL,
-  status TEXT NOT NULL DEFAULT 'pending',
-  explanation TEXT,
-  approved_by TEXT REFERENCES users(id),
-  approved_at TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS fuel_quality_tests (
-  id TEXT PRIMARY KEY,
-  sample_ref TEXT UNIQUE NOT NULL,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  tank_id TEXT REFERENCES tanks(id),
-  fuel_product_id TEXT NOT NULL REFERENCES fuel_products(id),
-  sample_date TEXT NOT NULL,
-  sample_type TEXT,
-  test_type TEXT,
-  result TEXT,
-  pass_fail TEXT NOT NULL DEFAULT 'pending',
-  technician TEXT,
-  certificate_ref TEXT,
-  comments TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS maintenance_records (
-  id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  asset_type TEXT NOT NULL, -- tank | refueller | meter | other
-  asset_id TEXT NOT NULL,
-  maintenance_type TEXT,
-  scheduled_date TEXT,
-  completed_date TEXT,
-  technician TEXT,
-  work_performed TEXT,
-  parts TEXT,
-  cost REAL,
-  next_maintenance TEXT,
-  status TEXT NOT NULL DEFAULT 'scheduled',
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS inspections (
-  id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  asset_type TEXT NOT NULL,
-  asset_id TEXT NOT NULL,
-  inspection_date TEXT NOT NULL,
-  inspector TEXT,
-  result TEXT,
-  notes TEXT,
-  next_inspection TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS invoices (
-  id TEXT PRIMARY KEY,
-  invoice_number TEXT UNIQUE NOT NULL,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  customer_id TEXT NOT NULL REFERENCES customers(id),
-  uplift_id TEXT REFERENCES fuel_uplifts(id),
-  amount REAL NOT NULL,
-  taxes_fees REAL NOT NULL DEFAULT 0,
-  total_amount REAL NOT NULL,
-  currency TEXT NOT NULL DEFAULT 'PGK',
-  invoice_date TEXT NOT NULL,
-  due_date TEXT,
-  status TEXT NOT NULL DEFAULT 'draft',
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS payments (
-  id TEXT PRIMARY KEY,
-  invoice_id TEXT NOT NULL REFERENCES invoices(id),
-  amount REAL NOT NULL,
-  paid_at TEXT NOT NULL DEFAULT (datetime('now')),
-  method TEXT,
-  reference TEXT
 );
 
 CREATE TABLE IF NOT EXISTS alerts (
   id TEXT PRIMARY KEY,
   severity TEXT NOT NULL, -- critical | warning
-  airport_id TEXT REFERENCES airports(id),
+  airport_id TEXT,
   asset_type TEXT,
   asset_id TEXT,
   category TEXT NOT NULL,
@@ -383,37 +65,165 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE TABLE IF NOT EXISTS iot_devices (
+-- Fleet Management Tables
+CREATE TABLE IF NOT EXISTS vehicles (
   id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  asset_type TEXT NOT NULL, -- tank | refueller
-  asset_id TEXT NOT NULL,
-  device_type TEXT NOT NULL, -- level_sensor | flow_meter | temperature | water_detection | gps
-  status TEXT NOT NULL DEFAULT 'active',
+  vehicle_number TEXT UNIQUE NOT NULL,
+  registration_number TEXT NOT NULL,
+  make TEXT NOT NULL,
+  model TEXT NOT NULL,
+  year INTEGER,
+  vehicle_type TEXT NOT NULL,
+  chassis_vin TEXT,
+  engine_number TEXT,
+  colour TEXT,
+  fuel_type TEXT NOT NULL,
+  department TEXT,
+  location TEXT,
+  status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active', 'inactive', 'under_repair', 'disposed')),
+  acquisition_date TEXT,
+  acquisition_cost REAL,
+  current_value REAL,
+  ownership TEXT NOT NULL DEFAULT 'owned' CHECK(ownership IN ('owned', 'leased', 'hired', 'other')),
+  insurance_policy TEXT,
+  insurance_expiry TEXT,
+  registration_expiry TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS drivers (
+  id TEXT PRIMARY KEY,
+  employee_number TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
+  department TEXT,
+  licence_number TEXT NOT NULL,
+  licence_class TEXT,
+  licence_expiry TEXT NOT NULL,
+  authorisation_status TEXT NOT NULL DEFAULT 'authorised' CHECK(authorisation_status IN ('authorised', 'suspended', 'revoked', 'pending')),
+  accident_history TEXT,
+  training TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS vehicle_allocations (
+  id TEXT PRIMARY KEY,
+  vehicle_id TEXT NOT NULL REFERENCES vehicles(id),
+  department TEXT,
+  custodian TEXT,
+  driver_id TEXT REFERENCES drivers(id),
+  allocation_date TEXT NOT NULL,
+  return_date TEXT,
+  approval_status TEXT NOT NULL DEFAULT 'approved' CHECK(approval_status IN ('pending', 'approved', 'rejected', 'returned')),
+  authorisation_status TEXT NOT NULL DEFAULT 'active' CHECK(authorisation_status IN ('active', 'expired', 'revoked')),
+  notes TEXT,
   created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE TABLE IF NOT EXISTS iot_readings (
+CREATE TABLE IF NOT EXISTS vehicle_fuel_logs (
   id TEXT PRIMARY KEY,
-  device_id TEXT NOT NULL REFERENCES iot_devices(id),
-  reading_type TEXT NOT NULL,
-  value REAL NOT NULL,
-  unit TEXT,
-  recorded_at TEXT NOT NULL DEFAULT (datetime('now'))
+  vehicle_id TEXT NOT NULL REFERENCES vehicles(id),
+  driver_id TEXT REFERENCES drivers(id),
+  date TEXT NOT NULL,
+  time TEXT,
+  station TEXT,
+  fuel_type TEXT NOT NULL,
+  litres REAL NOT NULL,
+  cost_per_litre REAL NOT NULL,
+  total_cost REAL NOT NULL,
+  odometer_reading REAL NOT NULL,
+  payment_method TEXT,
+  receipt_ref TEXT,
+  l_per_100km REAL,
+  km_per_l REAL,
+  cost_per_km REAL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE TABLE IF NOT EXISTS sync_queue (
+CREATE TABLE IF NOT EXISTS vehicle_trips (
   id TEXT PRIMARY KEY,
-  airport_id TEXT NOT NULL REFERENCES airports(id),
-  entity TEXT NOT NULL,
-  local_id TEXT NOT NULL,
-  payload TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'pending', -- pending | validated | synced | conflict
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  synced_at TEXT
+  vehicle_id TEXT NOT NULL REFERENCES vehicles(id),
+  driver_id TEXT REFERENCES drivers(id),
+  date TEXT NOT NULL,
+  time_out TEXT,
+  time_in TEXT,
+  start_location TEXT NOT NULL,
+  destination TEXT NOT NULL,
+  purpose TEXT,
+  begin_odometer REAL NOT NULL,
+  end_odometer REAL NOT NULL,
+  total_km REAL NOT NULL,
+  odometer_anomaly INTEGER NOT NULL DEFAULT 0,
+  authorising_officer TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
-CREATE INDEX IF NOT EXISTS idx_inv_txn_tank ON inventory_transactions(tank_id);
-CREATE INDEX IF NOT EXISTS idx_uplift_airport ON fuel_uplifts(airport_id);
-CREATE INDEX IF NOT EXISTS idx_receipt_airport ON fuel_receipts(airport_id);
+CREATE TABLE IF NOT EXISTS vehicle_inspections (
+  id TEXT PRIMARY KEY,
+  vehicle_id TEXT NOT NULL REFERENCES vehicles(id),
+  inspector_id TEXT REFERENCES users(id),
+  inspector_name TEXT NOT NULL,
+  inspection_date TEXT NOT NULL,
+  result TEXT NOT NULL CHECK(result IN ('pass', 'fail', 'requires_attention')),
+  checklist TEXT NOT NULL,
+  notes TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS vehicle_maintenance (
+  id TEXT PRIMARY KEY,
+  vehicle_id TEXT NOT NULL REFERENCES vehicles(id),
+  maintenance_type TEXT NOT NULL CHECK(maintenance_type IN ('scheduled_service', 'unscheduled_repair', 'inspection_fix', 'other')),
+  description TEXT NOT NULL,
+  scheduled_date TEXT,
+  completed_date TEXT,
+  technician TEXT,
+  work_performed TEXT,
+  parts TEXT,
+  cost REAL,
+  status TEXT NOT NULL DEFAULT 'scheduled' CHECK(status IN ('scheduled', 'in_progress', 'completed', 'cancelled')),
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS vehicle_breakdowns (
+  id TEXT PRIMARY KEY,
+  vehicle_id TEXT NOT NULL REFERENCES vehicles(id),
+  driver_id TEXT REFERENCES drivers(id),
+  breakdown_date TEXT NOT NULL,
+  location TEXT NOT NULL,
+  description TEXT NOT NULL,
+  towing_required INTEGER NOT NULL DEFAULT 0,
+  status TEXT NOT NULL DEFAULT 'reported' CHECK(status IN ('reported', 'in_repair', 'resolved')),
+  resolution_notes TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS vehicle_accidents (
+  id TEXT PRIMARY KEY,
+  vehicle_id TEXT NOT NULL REFERENCES vehicles(id),
+  driver_id TEXT REFERENCES drivers(id),
+  accident_date TEXT NOT NULL,
+  location TEXT,
+  description TEXT,
+  damage_severity TEXT,
+  photo_urls TEXT,
+  status TEXT NOT NULL DEFAULT 'reported',
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS vehicle_disposals (
+  id TEXT PRIMARY KEY,
+  vehicle_id TEXT NOT NULL REFERENCES vehicles(id),
+  disposal_date TEXT NOT NULL,
+  disposal_method TEXT,
+  disposal_amount REAL,
+  reason TEXT,
+  approved_by TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_logs(entity, entity_id);
+CREATE INDEX IF NOT EXISTS idx_vehicles_status ON vehicles(status);
+CREATE INDEX IF NOT EXISTS idx_fuel_logs_vehicle ON vehicle_fuel_logs(vehicle_id);
+CREATE INDEX IF NOT EXISTS idx_trips_vehicle ON vehicle_trips(vehicle_id);
