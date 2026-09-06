@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("admin@dspng.tech");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -16,7 +16,7 @@ export default function Login() {
     setBusy(true);
     try {
       await login(email, password);
-      navigate("/national");
+      navigate("/fleet");
     } catch (err: any) {
       setError(err.message || "Login failed");
     } finally {
@@ -50,10 +50,6 @@ export default function Login() {
           <button type="submit" className="btn-primary w-full" disabled={busy}>
             {busy ? "Signing in…" : "Sign in"}
           </button>
-          <div className="text-xs text-ink-500 pt-2 border-t border-base-600">
-            Demo account: <span className="font-data">admin@dspng.tech</span> / <span className="font-data">Admin@123!</span>
-            <br />DEMO / NOT REAL DATA
-          </div>
         </form>
       </div>
     </div>
