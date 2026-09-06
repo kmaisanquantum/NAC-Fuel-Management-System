@@ -33,7 +33,7 @@ export default function Login() {
 
       <div className="relative w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="font-display text-xl font-semibold text-ink-100">Fuel Management System</h1>
+          <h1 className="font-display text-xl font-semibold text-ink-100">Fleet Management System</h1>
           <p className="text-xs text-ink-500 mt-1 uppercase tracking-widest">Fleet & Vehicle Operations</p>
         </div>
 

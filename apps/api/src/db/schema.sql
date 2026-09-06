@@ -1,4 +1,4 @@
--- Fuel Management System
+-- Fleet Management System
 -- Demo/dev schema (SQLite). Production schema is PostgreSQL: see /database/migrations/001_init.sql
 -- Types are simplified for SQLite (TEXT for UUID/timestamps, REAL for numerics, INTEGER 0/1 for booleans).
 

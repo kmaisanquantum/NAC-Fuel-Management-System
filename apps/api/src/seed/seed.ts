@@ -1,7 +1,7 @@
 /**
  * DEMO / NOT REAL NAC DATA
  * Generates realistic but entirely fictional demonstration data for the
- * Fuel Management System MVP, per spec section 31.
+ * Fleet Management System MVP, per spec section 31.
  */
 import bcrypt from "bcryptjs";
 import { v4 as uuid } from "uuid";
@@ -13,7 +13,7 @@ import { runReconciliation } from "../services/reconciliationService";
 
 initSchema();
 
-console.log("Seeding Fuel Management System demo data (DEMO / NOT REAL NAC DATA)...");
+console.log("Seeding Fleet Management System demo data (DEMO / NOT REAL NAC DATA)...");
 
 // Wipe existing data for a clean re-seed (dev convenience only)
 const tables = [
