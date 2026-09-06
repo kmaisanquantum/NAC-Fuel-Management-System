@@ -42,7 +42,7 @@ for (const [name, desc] of ROLES) {
 }
 
 // --- Users ---
-const passwordHash = bcrypt.hashSync("Admin@123!", 10);
+const passwordHash = bcrypt.hashSync("Admin@2026", 10);
 function makeUser(email: string, fullName: string, role: string) {
   const id = uuid();
   db.prepare(`
@@ -122,4 +122,4 @@ db.prepare(`
 `).run(uuid(), vehicleIds["V001"]);
 
 console.log("Seed complete: 4 vehicles, 3 drivers, allocations, fuel logs, trips, inspections, and maintenance records seeded.");
-console.log("Demo login: admin@dspng.tech / Admin@123!");
+console.log("Demo login: admin@dspng.tech / Admin@2026");

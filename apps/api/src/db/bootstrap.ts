@@ -28,21 +28,29 @@ export function ensureBootstrapAccounts() {
 
   const passwordHash = bcrypt.hashSync(rawPassword, 10);
 
-  // Ensure admin user exists
+  // Ensure admin user exists and password is idempotent
   const existingAdmin = db.prepare("SELECT id FROM users WHERE email = ?").get(adminEmail);
   if (!existingAdmin) {
     db.prepare(`
       INSERT INTO users (id, email, password_hash, full_name, role_id, status)
       VALUES (?, ?, ?, 'Admin User', ?, 'active')
     `).run(uuid(), adminEmail, passwordHash, roleMap["admin"]);
+  } else {
+    db.prepare(`
+      UPDATE users SET password_hash = ?, status = 'active' WHERE email = ?
+    `).run(passwordHash, adminEmail);
   }
 
-  // Ensure operator user exists
+  // Ensure operator user exists and password is idempotent
   const existingUser = db.prepare("SELECT id FROM users WHERE email = ?").get(userEmail);
   if (!existingUser) {
     db.prepare(`
       INSERT INTO users (id, email, password_hash, full_name, role_id, status)
       VALUES (?, ?, ?, 'Standard User', ?, 'active')
     `).run(uuid(), userEmail, passwordHash, roleMap["fuel_operator"]);
+  } else {
+    db.prepare(`
+      UPDATE users SET password_hash = ?, status = 'active' WHERE email = ?
+    `).run(passwordHash, userEmail);
   }
 }
