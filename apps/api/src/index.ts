@@ -12,27 +12,18 @@ import { ensureBootstrapAccounts } from "./db/bootstrap";
 import { errorHandler, notFound } from "./middleware/errorHandler";
 
 import authRoutes from "./routes/auth";
-import airportRoutes from "./routes/airports";
-import fuelProductRoutes from "./routes/fuelProducts";
-import tankRoutes from "./routes/tanks";
-import supplierRoutes from "./routes/suppliers";
-import refuellerRoutes from "./routes/refuellers";
-import airlineRoutes from "./routes/airlines";
-import aircraftRoutes from "./routes/aircraft";
-import customerRoutes from "./routes/customers";
-import receiptRoutes from "./routes/receipts";
-import transferRoutes from "./routes/transfers";
-import upliftRoutes from "./routes/uplifts";
-import inventoryRoutes from "./routes/inventory";
-import reconciliationRoutes from "./routes/reconciliation";
-import billingRoutes from "./routes/billing";
-import qualityRoutes from "./routes/quality";
-import maintenanceRoutes from "./routes/maintenance";
 import alertRoutes from "./routes/alerts";
 import auditRoutes from "./routes/audit";
-import iotRoutes from "./routes/iot";
-import reportRoutes from "./routes/reports";
 import userRoutes from "./routes/users";
+
+import vehiclesRoutes from "./routes/vehicles";
+import driversRoutes from "./routes/drivers";
+import vehicleAllocationsRoutes from "./routes/vehicleAllocations";
+import vehicleFuelLogsRoutes from "./routes/vehicleFuelLogs";
+import vehicleTripsRoutes from "./routes/vehicleTrips";
+import vehicleInspectionsRoutes from "./routes/vehicleInspections";
+import vehicleMaintenanceRoutes from "./routes/vehicleMaintenance";
+import fleetDashboardRoutes from "./routes/fleetDashboard";
 
 initSchema();
 ensureBootstrapAccounts();
@@ -53,27 +44,18 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/airports", airportRoutes);
-app.use("/api/v1/fuel-products", fuelProductRoutes);
-app.use("/api/v1/tanks", tankRoutes);
-app.use("/api/v1/suppliers", supplierRoutes);
-app.use("/api/v1/refuellers", refuellerRoutes);
-app.use("/api/v1/airlines", airlineRoutes);
-app.use("/api/v1/aircraft", aircraftRoutes);
-app.use("/api/v1/customers", customerRoutes);
-app.use("/api/v1/receipts", receiptRoutes);
-app.use("/api/v1/transfers", transferRoutes);
-app.use("/api/v1/uplifts", upliftRoutes);
-app.use("/api/v1/inventory", inventoryRoutes);
-app.use("/api/v1/reconciliation", reconciliationRoutes);
-app.use("/api/v1/billing", billingRoutes);
-app.use("/api/v1/quality", qualityRoutes);
-app.use("/api/v1/maintenance", maintenanceRoutes);
 app.use("/api/v1/alerts", alertRoutes);
 app.use("/api/v1/audit-logs", auditRoutes);
-app.use("/api/v1/iot", iotRoutes);
-app.use("/api/v1/reports", reportRoutes);
 app.use("/api/v1/users", userRoutes);
+
+app.use("/api/v1/vehicles", vehiclesRoutes);
+app.use("/api/v1/drivers", driversRoutes);
+app.use("/api/v1/vehicle-allocations", vehicleAllocationsRoutes);
+app.use("/api/v1/vehicle-fuel-logs", vehicleFuelLogsRoutes);
+app.use("/api/v1/vehicle-trips", vehicleTripsRoutes);
+app.use("/api/v1/vehicle-inspections", vehicleInspectionsRoutes);
+app.use("/api/v1/vehicle-maintenance", vehicleMaintenanceRoutes);
+app.use("/api/v1/fleet-dashboard", fleetDashboardRoutes);
 
 const webDir = process.env.WEB_DIR || path.join(__dirname, "public");
 if (fs.existsSync(webDir)) {
