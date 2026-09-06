@@ -8,7 +8,7 @@ flowchart LR
     MQTT --> GW[IoT Gateway]
     GW --> BROKER[Message Broker]
     BROKER --> TELEMETRY[Telemetry Service]
-    TELEMETRY --> NAFMS[Fuel Management System]
+    TELEMETRY --> NAFMS[Fleet Management System]
 ```
 
 Future sensor types: tank level sensors, flow meters, temperature sensors,

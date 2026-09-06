@@ -63,7 +63,7 @@ export default function AppShell() {
       <header className="lg:hidden flex items-center justify-between px-4 py-3 bg-base-900 border-b border-base-700 shrink-0 sticky top-0 z-20">
         <div className="flex items-center gap-3">
           <div className="font-display font-semibold text-base leading-tight text-ink-100">
-            Fuel <span className="text-amber-400">Management System</span>
+            Fleet <span className="text-amber-400">Management System</span>
           </div>
         </div>
         <button
@@ -98,7 +98,7 @@ export default function AppShell() {
       >
         <div className="px-5 py-5 border-b border-base-700 flex items-center justify-between">
           <div>
-            <div className="font-display font-semibold text-lg leading-tight text-ink-100">Fuel</div>
+            <div className="font-display font-semibold text-lg leading-tight text-ink-100">Fleet</div>
             <div className="font-display font-semibold text-lg leading-tight text-amber-400">Management System</div>
             <div className="text-[10px] uppercase tracking-widest text-ink-500 mt-1">Fleet & Operations Platform</div>
           </div>

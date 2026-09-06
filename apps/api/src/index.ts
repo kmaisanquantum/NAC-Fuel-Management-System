@@ -49,7 +49,7 @@ const apiLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 1000, standardHead
 app.use("/api", apiLimiter);
 
 app.get("/health", (_req, res) => {
-  res.json({ status: "ok", service: "Fuel Management System API", time: new Date().toISOString() });
+  res.json({ status: "ok", service: "Fleet Management System API", time: new Date().toISOString() });
 });
 
 app.use("/api/v1/auth", authRoutes);
@@ -89,7 +89,7 @@ app.use(errorHandler);
 const PORT = Number(process.env.PORT) || 4000;
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Fuel Management System API listening on port ${PORT}`);
+  console.log(`Fleet Management System API listening on port ${PORT}`);
 });
 
 export default app;

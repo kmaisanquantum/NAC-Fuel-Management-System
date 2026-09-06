@@ -1,8 +1,8 @@
 {
-  "name": "nac-fuel-management",
+  "name": "fleet-management-system",
   "private": true,
   "version": "0.1.0",
-  "description": "Fuel Management System - monorepo root",
+  "description": "Fleet Management System - monorepo root",
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
     "dev:api": "npm --prefix apps/api run dev",
