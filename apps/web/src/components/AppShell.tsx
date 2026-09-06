@@ -7,6 +7,7 @@ const NAV_GROUPS: { title: string; items: { to: string; label: string }[] }[] = 
     title: "Fleet Management",
     items: [
       { to: "/fleet", label: "Fleet Dashboard" },
+      { to: "/fleet-consumption", label: "Division Analytics" },
       { to: "/vehicles", label: "Vehicles Register" },
       { to: "/drivers", label: "Driver Register" },
       { to: "/fleet-allocations", label: "Allocations" },
