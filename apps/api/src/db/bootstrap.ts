@@ -4,7 +4,6 @@ import { db } from "./index";
 
 export function ensureBootstrapAccounts() {
   const adminEmail = process.env.BOOTSTRAP_ADMIN_EMAIL || "admin@dspng.tech";
-  const userEmail = process.env.BOOTSTRAP_USER_EMAIL || "user@dspng.tech";
   const rawPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD || "Admin@2026";
 
   // Ensure default roles exist
@@ -39,18 +38,5 @@ export function ensureBootstrapAccounts() {
     db.prepare(`
       UPDATE users SET password_hash = ?, status = 'active' WHERE email = ?
     `).run(passwordHash, adminEmail);
-  }
-
-  // Ensure operator user exists and password is idempotent
-  const existingUser = db.prepare("SELECT id FROM users WHERE email = ?").get(userEmail);
-  if (!existingUser) {
-    db.prepare(`
-      INSERT INTO users (id, email, password_hash, full_name, role_id, status)
-      VALUES (?, ?, ?, 'Standard User', ?, 'active')
-    `).run(uuid(), userEmail, passwordHash, roleMap["fuel_operator"]);
-  } else {
-    db.prepare(`
-      UPDATE users SET password_hash = ?, status = 'active' WHERE email = ?
-    `).run(passwordHash, userEmail);
   }
 }

@@ -53,8 +53,6 @@ function makeUser(email: string, fullName: string, role: string) {
 }
 
 const adminUser = makeUser("admin@dspng.tech", "Admin User", "admin");
-const fleetManagerUser = makeUser("fleet.manager@dspng.tech", "Grace Kila", "fleet_manager");
-const driverUser = makeUser("driver@dspng.tech", "Peter Namaliu", "driver");
 
 // --- Fleet Vehicles ---
 const vehicleData = [
