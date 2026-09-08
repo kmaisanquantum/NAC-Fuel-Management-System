@@ -2,7 +2,11 @@ import { useState } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const NAV_GROUPS: { title: string; items: { to: string; label: string }[] }[] = [
+const NAV_GROUPS: {
+  title: string;
+  adminOnly?: boolean;
+  items: { to: string; label: string; adminOnly?: boolean }[];
+}[] = [
   {
     title: "Fleet Management",
     items: [
@@ -19,10 +23,11 @@ const NAV_GROUPS: { title: string; items: { to: string; label: string }[] }[] = 
   },
   {
     title: "Administration",
+    adminOnly: true,
     items: [
       { to: "/alerts", label: "Alerts" },
       { to: "/audit", label: "Audit Logs" },
-      { to: "/users", label: "Users & Roles" },
+      { to: "/users", label: "Users & Roles", adminOnly: true },
       { to: "/settings", label: "System Settings" },
     ],
   },
@@ -33,6 +38,13 @@ export default function AppShell() {
   const navigate = useNavigate();
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
+
+  const visibleNavGroups = NAV_GROUPS.map((group) => {
+    if (group.adminOnly && user?.role !== "admin") return null;
+    const items = group.items.filter((item) => !(item.adminOnly && user?.role !== "admin"));
+    if (items.length === 0) return null;
+    return { ...group, items };
+  }).filter(Boolean) as typeof NAV_GROUPS;
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-base-950">
@@ -91,7 +103,7 @@ export default function AppShell() {
           </button>
         </div>
         <nav className="flex-1 overflow-y-auto py-3">
-          {NAV_GROUPS.map((group) => (
+          {visibleNavGroups.map((group) => (
             <div key={group.title} className="mb-4">
               <div className="px-5 mb-1 text-[10px] uppercase tracking-widest text-ink-500 font-medium">{group.title}</div>
               {group.items.map((item) => (

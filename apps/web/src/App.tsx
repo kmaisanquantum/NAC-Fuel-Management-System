@@ -24,6 +24,14 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
+function RequireAdmin({ children }: { children: JSX.Element }) {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="min-h-screen flex items-center justify-center text-ink-500">Loading…</div>;
+  if (!user) return <Navigate to="/login" replace />;
+  if (user.role !== "admin") return <Navigate to="/fleet" replace />;
+  return children;
+}
+
 function AppRoutes() {
   return (
     <Routes>
@@ -46,10 +54,10 @@ function AppRoutes() {
         <Route path="/fleet-inspections" element={<VehicleInspections />} />
         <Route path="/fleet-maintenance" element={<VehicleMaintenance />} />
 
-        <Route path="/alerts" element={<Alerts />} />
-        <Route path="/audit" element={<AuditLog />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/alerts" element={<RequireAdmin><Alerts /></RequireAdmin>} />
+        <Route path="/audit" element={<RequireAdmin><AuditLog /></RequireAdmin>} />
+        <Route path="/users" element={<RequireAdmin><Users /></RequireAdmin>} />
+        <Route path="/settings" element={<RequireAdmin><Settings /></RequireAdmin>} />
       </Route>
       <Route path="*" element={<Navigate to="/fleet" replace />} />
     </Routes>
