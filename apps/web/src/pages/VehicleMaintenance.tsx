@@ -12,8 +12,8 @@ export default function VehicleMaintenancePage() {
   const [maintenanceType, setMaintenanceType] = useState<"scheduled_service" | "unscheduled_repair" | "inspection_fix" | "other">("scheduled_service");
   const [description, setDescription] = useState("");
   const [scheduledDate, setScheduledDate] = useState(new Date().toISOString().slice(0, 10));
-  const [technician, setTechnician] = useState("Toyota Port Moresby");
-  const [cost, setCost] = useState<number>(500);
+  const [technician, setTechnician] = useState("");
+  const [cost, setCost] = useState<number | "">("");
 
   const fetchData = () => {
     Promise.all([
@@ -131,7 +131,7 @@ export default function VehicleMaintenancePage() {
                 </div>
                 <div>
                   <label className="label">Estimated Cost (PGK)</label>
-                  <input className="input" type="number" value={cost} onChange={(e) => setCost(Number(e.target.value))} />
+                  <input className="input" type="number" value={cost} onChange={(e) => setCost(e.target.value === "" ? "" : Number(e.target.value))} />
                 </div>
               </div>
               <div>

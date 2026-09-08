@@ -9,10 +9,10 @@ export default function Drivers() {
 
   const [employeeNumber, setEmployeeNumber] = useState("");
   const [name, setName] = useState("");
-  const [department, setDepartment] = useState("Operations");
+  const [department, setDepartment] = useState("");
   const [licenceNumber, setLicenceNumber] = useState("");
-  const [licenceClass, setLicenceClass] = useState("Class 4 (Heavy)");
-  const [licenceExpiry, setLicenceExpiry] = useState("2027-12-31");
+  const [licenceClass, setLicenceClass] = useState("");
+  const [licenceExpiry, setLicenceExpiry] = useState("");
 
   const fetchDrivers = () => {
     api.get<{ data: Driver[] }>("/drivers")
