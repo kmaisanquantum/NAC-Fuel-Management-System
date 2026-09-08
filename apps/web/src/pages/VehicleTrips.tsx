@@ -12,14 +12,14 @@ export default function VehicleTrips() {
   const [vehicleId, setVehicleId] = useState("");
   const [driverId, setDriverId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [timeOut, setTimeOut] = useState("08:00");
-  const [timeIn, setTimeIn] = useState("17:00");
-  const [startLocation, setStartLocation] = useState("POM Depot");
-  const [destination, setDestination] = useState("Nadzab Checkpoint");
-  const [purpose, setPurpose] = useState("Routine Patrol & Inspection");
-  const [beginOdometer, setBeginOdometer] = useState<number>(45000);
-  const [endOdometer, setEndOdometer] = useState<number>(45150);
-  const [authorisingOfficer, setAuthorisingOfficer] = useState("Fleet Manager");
+  const [timeOut, setTimeOut] = useState("");
+  const [timeIn, setTimeIn] = useState("");
+  const [startLocation, setStartLocation] = useState("");
+  const [destination, setDestination] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [beginOdometer, setBeginOdometer] = useState<number | "">("");
+  const [endOdometer, setEndOdometer] = useState<number | "">("");
+  const [authorisingOfficer, setAuthorisingOfficer] = useState("");
 
   const fetchData = () => {
     Promise.all([
@@ -155,11 +155,11 @@ export default function VehicleTrips() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="label">Begin Odometer *</label>
-                  <input className="input" type="number" value={beginOdometer} onChange={(e) => setBeginOdometer(Number(e.target.value))} required />
+                  <input className="input" type="number" value={beginOdometer} onChange={(e) => setBeginOdometer(e.target.value === "" ? "" : Number(e.target.value))} required />
                 </div>
                 <div>
                   <label className="label">End Odometer *</label>
-                  <input className="input" type="number" value={endOdometer} onChange={(e) => setEndOdometer(Number(e.target.value))} required />
+                  <input className="input" type="number" value={endOdometer} onChange={(e) => setEndOdometer(e.target.value === "" ? "" : Number(e.target.value))} required />
                 </div>
               </div>
               <div>

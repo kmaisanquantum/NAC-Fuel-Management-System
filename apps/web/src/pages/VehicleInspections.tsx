@@ -9,7 +9,7 @@ export default function VehicleInspections() {
   const [showModal, setShowModal] = useState(false);
 
   const [vehicleId, setVehicleId] = useState("");
-  const [inspectorName, setInspectorName] = useState("John Kaupa");
+  const [inspectorName, setInspectorName] = useState("");
   const [inspectionDate, setInspectionDate] = useState(new Date().toISOString().slice(0, 10));
   const [result, setResult] = useState<"pass" | "fail" | "requires_attention">("pass");
   const [notes, setNotes] = useState("");

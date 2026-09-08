@@ -12,13 +12,13 @@ export default function VehicleFuelLogs() {
   const [vehicleId, setVehicleId] = useState("");
   const [driverId, setDriverId] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [time, setTime] = useState("08:00");
-  const [station, setStation] = useState("Puma Energy Jacksons");
+  const [time, setTime] = useState("");
+  const [station, setStation] = useState("");
   const [fuelType, setFuelType] = useState("Diesel");
-  const [litres, setLitres] = useState<number>(50);
-  const [costPerLitre, setCostPerLitre] = useState<number>(4.50);
-  const [odometerReading, setOdometerReading] = useState<number>(45000);
-  const [paymentMethod, setPaymentMethod] = useState("Fuel Card");
+  const [litres, setLitres] = useState<number | "">("");
+  const [costPerLitre, setCostPerLitre] = useState<number | "">("");
+  const [odometerReading, setOdometerReading] = useState<number | "">("");
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   const fetchData = () => {
     Promise.all([
@@ -145,15 +145,15 @@ export default function VehicleFuelLogs() {
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="label">Litres *</label>
-                  <input className="input" type="number" step="0.1" value={litres} onChange={(e) => setLitres(Number(e.target.value))} required />
+                  <input className="input" type="number" step="0.1" value={litres} onChange={(e) => setLitres(e.target.value === "" ? "" : Number(e.target.value))} required />
                 </div>
                 <div>
                   <label className="label">Cost/L (PGK) *</label>
-                  <input className="input" type="number" step="0.01" value={costPerLitre} onChange={(e) => setCostPerLitre(Number(e.target.value))} required />
+                  <input className="input" type="number" step="0.01" value={costPerLitre} onChange={(e) => setCostPerLitre(e.target.value === "" ? "" : Number(e.target.value))} required />
                 </div>
                 <div>
                   <label className="label">Odometer (km) *</label>
-                  <input className="input" type="number" value={odometerReading} onChange={(e) => setOdometerReading(Number(e.target.value))} required />
+                  <input className="input" type="number" value={odometerReading} onChange={(e) => setOdometerReading(e.target.value === "" ? "" : Number(e.target.value))} required />
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-3">
