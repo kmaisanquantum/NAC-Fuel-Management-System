@@ -101,4 +101,20 @@ router.put("/:id", requireRole(...FLEET_WRITE_ROLES), (req, res, next) => {
   } catch (e) { next(e); }
 });
 
+router.delete("/:id", requireRole(...FLEET_WRITE_ROLES), (req, res, next) => {
+  try {
+    const existing = db.prepare("SELECT * FROM drivers WHERE id = ?").get(req.params.id);
+    if (!existing) return res.status(404).json({ error: "Driver not found" });
+
+    db.prepare("DELETE FROM drivers WHERE id = ?").run(req.params.id);
+    writeAudit({ userId: req.user!.id, action: "DRIVER_DELETED", entity: "drivers", entityId: req.params.id, previousValue: existing });
+    res.status(204).end();
+  } catch (e: any) {
+    if (e.code && e.code.includes("SQLITE_CONSTRAINT")) {
+      return res.status(400).json({ error: "Cannot delete driver with linked records" });
+    }
+    next(e);
+  }
+});
+
 export default router;

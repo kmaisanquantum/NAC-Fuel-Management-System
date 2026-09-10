@@ -6,6 +6,7 @@ export default function Vehicles() {
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const [vehicleNumber, setVehicleNumber] = useState("");
   const [registrationNumber, setRegistrationNumber] = useState("");
@@ -28,10 +29,47 @@ export default function Vehicles() {
     fetchVehicles();
   }, []);
 
-  const handleCreate = async (e: FormEvent) => {
+  const resetForm = () => {
+    setEditingId(null);
+    setVehicleNumber("");
+    setRegistrationNumber("");
+    setMake("");
+    setModel("");
+    setYear(2023);
+    setVehicleType("Utility / Pickup");
+    setFuelType("Diesel");
+    setDepartment("Operations");
+    setLocation("Port Moresby (POM)");
+  };
+
+  const handleOpenCreate = () => {
+    resetForm();
+    setShowModal(true);
+  };
+
+  const handleOpenEdit = (v: Vehicle) => {
+    setEditingId(v.id);
+    setVehicleNumber(v.vehicle_number || "");
+    setRegistrationNumber(v.registration_number || "");
+    setMake(v.make || "");
+    setModel(v.model || "");
+    setYear(v.year || 2023);
+    setVehicleType(v.vehicle_type || "Utility / Pickup");
+    setFuelType(v.fuel_type || "Diesel");
+    setDepartment(v.department || "");
+    setLocation(v.location || "");
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    resetForm();
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await api.post("/vehicles", {
+      const payload = {
         vehicleNumber,
         registrationNumber,
         make,
@@ -43,11 +81,27 @@ export default function Vehicles() {
         location,
         status: "active",
         ownership: "owned",
-      });
-      setShowModal(false);
+      };
+
+      if (editingId) {
+        await api.put(`/vehicles/${editingId}`, payload);
+      } else {
+        await api.post("/vehicles", payload);
+      }
+      handleCloseModal();
       fetchVehicles();
     } catch (err: any) {
-      alert(err.message || "Failed to create vehicle");
+      alert(err.message || `Failed to ${editingId ? "update" : "create"} vehicle`);
+    }
+  };
+
+  const handleDelete = async (v: Vehicle) => {
+    if (!window.confirm(`Delete vehicle "${v.vehicle_number}"?`)) return;
+    try {
+      await api.del(`/vehicles/${v.id}`);
+      fetchVehicles();
+    } catch (err: any) {
+      alert(err.message || "Failed to delete vehicle");
     }
   };
 
@@ -60,7 +114,7 @@ export default function Vehicles() {
           <h1 className="text-2xl font-display font-semibold text-ink-100">Vehicle Master Register</h1>
           <p className="text-sm text-ink-400">Master record of all ground vehicles, pickups, and heavy fleet assets</p>
         </div>
-        <button className="btn-primary" onClick={() => setShowModal(true)}>+ Register New Vehicle</button>
+        <button className="btn-primary" onClick={handleOpenCreate}>+ Register New Vehicle</button>
       </div>
 
       <div className="panel overflow-x-auto">
@@ -75,6 +129,7 @@ export default function Vehicles() {
               <th className="px-4 py-3">Department</th>
               <th className="px-4 py-3">Location</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
@@ -96,10 +151,16 @@ export default function Vehicles() {
                     {v.status.replace("_", " ")}
                   </span>
                 </td>
+                <td className="px-4 py-3 text-right">
+                  <div className="flex items-center justify-end gap-2">
+                    <button className="px-2 py-1 text-xs font-medium text-amber-400 hover:text-amber-300 hover:bg-base-800 rounded" onClick={() => handleOpenEdit(v)}>Edit</button>
+                    <button className="px-2 py-1 text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-base-800 rounded" onClick={() => handleDelete(v)}>Delete</button>
+                  </div>
+                </td>
               </tr>
             ))}
             {(!Array.isArray(vehicles) || vehicles.length === 0) && (
-              <tr><td colSpan={8} className="px-4 py-6 text-center text-ink-500">No vehicles registered yet.</td></tr>
+              <tr><td colSpan={9} className="px-4 py-6 text-center text-ink-500">No vehicles registered yet.</td></tr>
             )}
           </tbody>
         </table>
@@ -108,12 +169,12 @@ export default function Vehicles() {
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
           <div className="panel p-6 max-w-lg w-full space-y-4">
-            <h2 className="text-lg font-display font-semibold text-ink-100">Register Vehicle</h2>
-            <form onSubmit={handleCreate} className="space-y-3">
+            <h2 className="text-lg font-display font-semibold text-ink-100">{editingId ? "Edit Vehicle" : "Register Vehicle"}</h2>
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="label">Vehicle Number *</label>
-                  <input className="input" value={vehicleNumber} onChange={(e) => setVehicleNumber(e.target.value)} required placeholder="V005" />
+                  <input className="input" value={vehicleNumber} onChange={(e) => setVehicleNumber(e.target.value)} required placeholder="V005" disabled={Boolean(editingId)} />
                 </div>
                 <div>
                   <label className="label">Registration # *</label>
@@ -151,8 +212,8 @@ export default function Vehicles() {
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-3">
-                <button type="button" className="btn-ghost" onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="btn-primary">Save Vehicle</button>
+                <button type="button" className="btn-ghost" onClick={handleCloseModal}>Cancel</button>
+                <button type="submit" className="btn-primary">{editingId ? "Update Vehicle" : "Save Vehicle"}</button>
               </div>
             </form>
           </div>

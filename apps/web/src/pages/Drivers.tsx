@@ -6,6 +6,7 @@ export default function Drivers() {
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   const [employeeNumber, setEmployeeNumber] = useState("");
   const [name, setName] = useState("");
@@ -25,10 +26,41 @@ export default function Drivers() {
     fetchDrivers();
   }, []);
 
-  const handleCreate = async (e: FormEvent) => {
+  const resetForm = () => {
+    setEditingId(null);
+    setEmployeeNumber("");
+    setName("");
+    setDepartment("");
+    setLicenceNumber("");
+    setLicenceClass("");
+    setLicenceExpiry("");
+  };
+
+  const handleOpenCreate = () => {
+    resetForm();
+    setShowModal(true);
+  };
+
+  const handleOpenEdit = (d: Driver) => {
+    setEditingId(d.id);
+    setEmployeeNumber(d.employee_number || "");
+    setName(d.name || "");
+    setDepartment(d.department || "");
+    setLicenceNumber(d.licence_number || "");
+    setLicenceClass(d.licence_class || "");
+    setLicenceExpiry(d.licence_expiry || "");
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    resetForm();
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await api.post("/drivers", {
+      const payload = {
         employeeNumber,
         name,
         department,
@@ -36,11 +68,27 @@ export default function Drivers() {
         licenceClass,
         licenceExpiry,
         authorisationStatus: "authorised",
-      });
-      setShowModal(false);
+      };
+
+      if (editingId) {
+        await api.put(`/drivers/${editingId}`, payload);
+      } else {
+        await api.post("/drivers", payload);
+      }
+      handleCloseModal();
       fetchDrivers();
     } catch (err: any) {
-      alert(err.message || "Failed to register driver");
+      alert(err.message || `Failed to ${editingId ? "update" : "register"} driver`);
+    }
+  };
+
+  const handleDelete = async (d: Driver) => {
+    if (!window.confirm(`Delete driver "${d.name}"?`)) return;
+    try {
+      await api.del(`/drivers/${d.id}`);
+      fetchDrivers();
+    } catch (err: any) {
+      alert(err.message || "Failed to delete driver");
     }
   };
 
@@ -53,7 +101,7 @@ export default function Drivers() {
           <h1 className="text-2xl font-display font-semibold text-ink-100">Driver Register</h1>
           <p className="text-sm text-ink-400">Authorised drivers, licence classes, training, and accident histories</p>
         </div>
-        <button className="btn-primary" onClick={() => setShowModal(true)}>+ Add Driver</button>
+        <button className="btn-primary" onClick={handleOpenCreate}>+ Add Driver</button>
       </div>
 
       <div className="panel overflow-x-auto">
@@ -67,6 +115,7 @@ export default function Drivers() {
               <th className="px-4 py-3">Class</th>
               <th className="px-4 py-3">Expiry</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-base-800 text-ink-200">
@@ -83,10 +132,16 @@ export default function Drivers() {
                     {d.authorisation_status}
                   </span>
                 </td>
+                <td className="px-4 py-3 text-right">
+                  <div className="flex items-center justify-end gap-2">
+                    <button className="px-2 py-1 text-xs font-medium text-amber-400 hover:text-amber-300 hover:bg-base-800 rounded" onClick={() => handleOpenEdit(d)}>Edit</button>
+                    <button className="px-2 py-1 text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-base-800 rounded" onClick={() => handleDelete(d)}>Delete</button>
+                  </div>
+                </td>
               </tr>
             ))}
             {(!Array.isArray(drivers) || drivers.length === 0) && (
-              <tr><td colSpan={7} className="px-4 py-6 text-center text-ink-500">No drivers registered yet.</td></tr>
+              <tr><td colSpan={8} className="px-4 py-6 text-center text-ink-500">No drivers registered yet.</td></tr>
             )}
           </tbody>
         </table>
@@ -95,11 +150,11 @@ export default function Drivers() {
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
           <div className="panel p-6 max-w-md w-full space-y-4">
-            <h2 className="text-lg font-display font-semibold text-ink-100">Register Driver</h2>
-            <form onSubmit={handleCreate} className="space-y-3">
+            <h2 className="text-lg font-display font-semibold text-ink-100">{editingId ? "Edit Driver" : "Register Driver"}</h2>
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label className="label">Employee # *</label>
-                <input className="input" value={employeeNumber} onChange={(e) => setEmployeeNumber(e.target.value)} required placeholder="EMP-104" />
+                <input className="input" value={employeeNumber} onChange={(e) => setEmployeeNumber(e.target.value)} required placeholder="EMP-104" disabled={Boolean(editingId)} />
               </div>
               <div>
                 <label className="label">Full Name *</label>
@@ -120,8 +175,8 @@ export default function Drivers() {
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-3">
-                <button type="button" className="btn-ghost" onClick={() => setShowModal(false)}>Cancel</button>
-                <button type="submit" className="btn-primary">Save Driver</button>
+                <button type="button" className="btn-ghost" onClick={handleCloseModal}>Cancel</button>
+                <button type="submit" className="btn-primary">{editingId ? "Update Driver" : "Save Driver"}</button>
               </div>
             </form>
           </div>
