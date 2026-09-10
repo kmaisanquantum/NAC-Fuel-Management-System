@@ -17,19 +17,20 @@ describe("Users router endpoints unit test", () => {
       db.prepare(`INSERT INTO roles (id, name, description) VALUES (?, 'admin', 'System Admin')`).run(adminRoleId, 'admin');
     }
 
+    const s = uuid().substring(0, 6);
     // create dummy admin user for req.user
     adminId = uuid();
     db.prepare(`
-      INSERT INTO users (id, email, password_hash, full_name, role_id, status)
-      VALUES (?, 'testadmin@dspng.tech', 'hash', 'Test Admin', ?, 'active')
-    `).run(adminId, adminRoleId);
+      INSERT OR IGNORE INTO users (id, email, password_hash, full_name, role_id, status)
+      VALUES (?, ?, 'hash', 'Test Admin', ?, 'active')
+    `).run(adminId, `testadmin_${s}@dspng.tech`, adminRoleId);
 
     // create a target test user
     testUserId = uuid();
     db.prepare(`
-      INSERT INTO users (id, email, password_hash, full_name, role_id, status)
-      VALUES (?, 'targetuser@dspng.tech', 'hash', 'Target User', ?, 'active')
-    `).run(testUserId, adminRoleId);
+      INSERT OR IGNORE INTO users (id, email, password_hash, full_name, role_id, status)
+      VALUES (?, ?, 'hash', 'Target User', ?, 'active')
+    `).run(testUserId, `targetuser_${s}@dspng.tech`, adminRoleId);
   });
 
   it("prevents self deletion", () => {
@@ -39,14 +40,15 @@ describe("Users router endpoints unit test", () => {
   });
 
   it("updates user full_name and email via PATCH logic", () => {
+    const updatedEmail = `updatedtarget_${uuid().substring(0, 6)}@dspng.tech`;
     db.prepare(`UPDATE users SET full_name = ?, email = ? WHERE id = ?`).run(
       "Updated Target User",
-      "updatedtarget@dspng.tech",
+      updatedEmail,
       testUserId
     );
     const updated = db.prepare(`SELECT full_name, email FROM users WHERE id = ?`).get(testUserId) as any;
     expect(updated.full_name).toBe("Updated Target User");
-    expect(updated.email).toBe("updatedtarget@dspng.tech");
+    expect(updated.email).toBe(updatedEmail);
   });
 
   it("soft deletes a user setting status = deleted", () => {
