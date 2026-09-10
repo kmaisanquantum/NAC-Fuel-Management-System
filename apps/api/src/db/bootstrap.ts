@@ -8,7 +8,7 @@ export function ensureBootstrapAccounts() {
 
   // Ensure default roles exist
   const rolesToEnsure = [
-    { name: "admin", desc: "NAC Administrator" },
+    { name: "admin", desc: "Systems Admin" },
     { name: "fuel_operator", desc: "Fuel Operator" },
   ];
 
@@ -18,6 +18,7 @@ export function ensureBootstrapAccounts() {
     const existing = db.prepare("SELECT id FROM roles WHERE name = ?").get(role.name) as { id: string } | undefined;
     if (existing) {
       roleMap[role.name] = existing.id;
+      db.prepare("UPDATE roles SET description = ? WHERE name = ?").run(role.desc, role.name);
     } else {
       const id = uuid();
       db.prepare("INSERT INTO roles (id, name, description) VALUES (?, ?, ?)").run(id, role.name, role.desc);
