@@ -22,7 +22,7 @@ for (const t of tables) {
 
 // --- Roles ---
 const ROLES = [
-  ["admin", "System Administrator"],
+  ["admin", "Systems Admin"],
   ["fleet_admin", "Fleet Administrator"],
   ["fleet_manager", "Fleet Manager"],
   ["department_manager", "Department Manager"],
